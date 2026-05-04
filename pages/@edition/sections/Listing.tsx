@@ -1,8 +1,19 @@
 import { usePageContext } from "vike-react/usePageContext";
 import type { customPageContext } from "../../+onCreatePageContext";
 import type { VolumeData } from "../../../store/types";
+import { navigate } from "vike/client/router";
 
-const Listing = ({ volumes }:{volumes: VolumeData[]} ) => {
+const Listing = ({
+    volumes,
+    loading,
+    clickedChapter,
+    setClickedChapter
+}: {
+    volumes: VolumeData[],
+    loading: boolean,
+    clickedChapter: number,
+    setClickedChapter: Function
+}) => {
 
 
     return (
@@ -15,6 +26,9 @@ const Listing = ({ volumes }:{volumes: VolumeData[]} ) => {
                             counter={vol.counter}
                             title={vol.title}
                             chapters={vol.chapters}
+                            loading={loading}
+                            clickedChapter={clickedChapter}
+                            setClickedChapter={setClickedChapter}
                         />
                     )
                 })}
@@ -23,7 +37,18 @@ const Listing = ({ volumes }:{volumes: VolumeData[]} ) => {
     )
 }
 
-const ListItem = ({ counter, title, chapters }: Partial<VolumeData>) => {
+const ListItem = ({
+    counter,
+    title,
+    chapters,
+    loading,
+    clickedChapter,
+    setClickedChapter
+}: Partial<VolumeData> & {
+    loading: boolean,
+    clickedChapter: number,
+    setClickedChapter: Function
+}) => {
     const { urlParsed, bunkoban } = usePageContext() as customPageContext
 
     return (
@@ -36,15 +61,20 @@ const ListItem = ({ counter, title, chapters }: Partial<VolumeData>) => {
                 <ul>
                     {chapters?.map((chap) => {
                         return (
-                            <li className="py-3 px-10 text-[15px] hover:link hover:text-link not-last:border-b border-dotted border-link">
-                                <a href={`${urlParsed.pathnameOriginal}/chapter/${chap.number}`}>
-                                    {chap.number}. 
+                            <li
+                                onClick={() => {
+                                    setClickedChapter(chap.number)
+                                    navigate(`${urlParsed.pathnameOriginal}/chapter/${chap.number}`)
+                                }}
+                                className="cursor-pointer py-3 px-10 flex justify-between text-[15px] hover:link hover:text-link not-last:border-b border-dotted border-link">
+                                <span className="hover:text-link">
+                                    {chap.number}.
                                     {bunkoban ?
-                                    " " + chap.jpn
-                                    :
-                                    " " + chap.title
+                                        " " + chap.jpn
+                                        :
+                                        " " + chap.title
                                     }
-                                </a>
+                                </span>
                             </li>
                         )
                     })}

@@ -3,8 +3,6 @@ export { createStore };
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { PageContext } from "vike/types";
 
-
-import volumeListingSlice from "./slices/volumeListing";
 import jumpToChapterSlice from "./slices/jumpToChapter";
 import pageMenuSlice from "./slices/pageMenu";
 
@@ -14,7 +12,6 @@ import { mangaApi } from "./api/mangaApi";
 const reducer = combineReducers({
     [mangaApi.reducerPath]: mangaApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    volumeListing: volumeListingSlice,
     pageMenu: pageMenuSlice,
     jumpToChapter: jumpToChapterSlice
 })

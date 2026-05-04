@@ -1,11 +1,22 @@
 import { usePageContext } from "vike-react/usePageContext";
 import type { VolumeData } from "../../../store/types";
 import type { customPageContext } from "../../+onCreatePageContext";
+import { navigate } from "vike/client/router";
 
 
 
-const Card = ({ volumes }: { volumes: VolumeData[]}) => {
+const Card = ({ 
+    volumes,
+    loading, 
+    clickedChapter,
+    setClickedChapter }: { 
+    volumes: VolumeData[],
+    loading: boolean,
+    clickedChapter: number,
+    setClickedChapter: Function
+}) => {
 
+    
     return (
         <>
             {volumes.map((vol) => {
@@ -20,6 +31,9 @@ const Card = ({ volumes }: { volumes: VolumeData[]}) => {
                             vol.chapters.at(-1)?.number || 0
                         ]}
                         cover={vol.cover}
+                        loading={loading}
+                        clickedChapter={clickedChapter}
+                        setClickedChapter={setClickedChapter}
                     />
                 )
             })}
@@ -27,7 +41,20 @@ const Card = ({ volumes }: { volumes: VolumeData[]}) => {
     )
 }
 
-const CardItem = ({ counter, title, chapters, cover, chapterRange }: VolumeData & {chapterRange: number[] }) => {
+const CardItem = ({ 
+    counter, 
+    title, 
+    chapters, 
+    cover, 
+    chapterRange, 
+    loading, 
+    clickedChapter,
+    setClickedChapter }: VolumeData & {
+        chapterRange: number[], 
+        loading: boolean, 
+        clickedChapter: number,
+        setClickedChapter: Function
+    }) => {
     const { urlParsed, bunkoban } = usePageContext() as customPageContext
 
 
@@ -37,30 +64,40 @@ const CardItem = ({ counter, title, chapters, cover, chapterRange }: VolumeData 
                 <div className="px-15 py-5">
                     <img src={cover} alt="" />
                 </div>
-                {!bunkoban &&
                     <div className="px-5 text-[20px] flex justify-center font-bold mt-2">
                         <h2>
-                            {counter}. {title}
+                            {bunkoban ?
+                            `Volume ${counter}`
+                            :
+                            `${counter}. ${title}`
+                            }
                         </h2>
                     </div>
-                }
-                <div tabIndex={0} className="collapse px-5 collapse-arrow cursor-pointer">
-                    <div className="collapse-title font-semibold">
+                <div tabIndex={0} className="collapse px-5 collapse-arrow cursor-pointer mt-3">
+                    <div className="collapse-title font-semibold border-dotted border-link border rounded-md">
                         Chapters 
                         <span className="opacity-70 ml-3">
                             {"( "}{chapterRange[0]} - {chapterRange[1]}{" )"} 
                         </span>
                     </div>
-                    <div className="collapse-content text-sm">
+                    <div className="collapse-content text-sm border-dotted border-link border-b border-x  rounded-b-md">
                         <ul>
                             {chapters?.map((chap) => {
                                 return (
                                     <li 
+                                    onClick={() => {
+                                        setClickedChapter(chap.number)
+                                        navigate(`${urlParsed.pathnameOriginal}/chapter/${chap.number}`)
+                                    }}
                                     key={chap.number}
-                                    className="py-3 px-10 text-[17px] hover:link hover:text-link not-last:border-b border-dotted border-link">
-                                        <a href={`${urlParsed.pathnameOriginal}/chapter/${chap.number}`}>
+                                    className="py-3 px-10 flex justify-between text-[17px] hover:link hover:text-link not-last:border-b border-dotted border-link">
+                                        <span 
+                                        className="hover:text-link">
                                             {chap.number}. {bunkoban ? chap.jpn : chap.title}
-                                        </a>
+                                        </span>
+                                        {loading && clickedChapter == chap.number &&
+                                        <span className="loading loading-spinner loading-xs"></span>
+                                        }
                                     </li>
                                 )
                             })}
