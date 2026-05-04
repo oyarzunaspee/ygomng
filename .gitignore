@@ -1,5 +1,7 @@
 # MacOS
 .DS_Store
+node_modules/
+.gitignore
 
 # Logs
 logs

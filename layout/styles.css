@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@plugin "../node_modules/daisyui/index.js";
+
+@theme {
+  --color-logo-1: #F74531;
+  --color-logo-2: #384CA3;
+  --color-yami: #1F0D36;
+  --color-yamier: #07010F;
+  --color-link: var(--color-violet-300);
+  --color-mute: var(--color-gray-300);
+  --color-tograd: var(--color-violet-400);
+  --color-fromgrad: #384CA3;
+}
+
+@layer components {
+
+.logo {
+  -webkit-mask: url("../../assets/kaiyami.svg") no-repeat center;
+  mask: url("../../assets/kaiyami.svg") no-repeat center;
+  mask-size: contain;
+}
+}

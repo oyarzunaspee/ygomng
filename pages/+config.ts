@@ -1,18 +1,15 @@
 import type { Config } from "vike/types";
 import vikeReact from "vike-react/config";
+import vikeReactRedux from "vike-react-redux/config"
+import Layout from "../layout/Layout";
 
-// Default config (can be overridden by pages)
-// https://vike.dev/config
-
-const config: Config = {
-  // https://vike.dev/head-tags
-  title: "My Vike App",
-  description: "Demo showcasing Vike",
-
-  extends: [vikeReact],
-
-  // https://vike.dev/server
-  server: true,
-};
-
-export default config;
+export default {
+  Layout,
+  title: "Yugioh Manga",
+  description: "prideship real",
+  extends: [vikeReact, vikeReactRedux],
+  redirects: {
+    "/": "/original",
+  },
+  prerender: true
+} satisfies Config;
