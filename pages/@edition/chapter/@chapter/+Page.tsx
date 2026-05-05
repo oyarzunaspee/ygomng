@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { ComparisonResponse, PageData } from "../../../../store/types";
 import { useLazyGetComparePagesQuery } from "../../../../store/api/mangaApi";
 import { closeCompare, updateFetching, closeScreen } from "../../../../store/slices/pageMenu";
+import { setLastChapter } from "../../../../store/slices/maxNextChapter";
 
 import type { customPageContext } from "../../../+onCreatePageContext";
 
@@ -17,7 +18,11 @@ import type { Data } from "./+data";
 export default function Page() {
     const dispatch = useAppDispatch()
 
-    const { pages } = useData<Data>()
+    const { pages, maxNext } = useData<Data>()
+
+    useEffect(() => {
+        dispatch(setLastChapter(maxNext))
+    }, [])
 
 
     const comparePages = useAppSelector((state) => state.pageMenu.value.compare)

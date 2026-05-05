@@ -19,14 +19,13 @@ async function data(pageContext: customPageContext) {
     chapterRes = (await response.json()) as ChapterResponse
 
     if (response.status == 200) {
-      return { pages: chapterRes.pages as PageData[] }
+      return { pages: chapterRes.pages as PageData[], maxNext: chapterRes.next_limit}
     } else if (response.status == 401) {
       throw render(401)
     } else {
       throw render(500)
     }
   } catch (err: any) {
-      console.log(err)
     throw render(err._pageContextAbort.abortStatusCode)
   }
 }

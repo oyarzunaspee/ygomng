@@ -24,6 +24,7 @@ const PageNav = () => {
     const comparePages = useAppSelector((state) => state.pageMenu.value.compare)
     const openMenu = useAppSelector((state) => state.pageMenu.value.open)
     const openJumpTo = useAppSelector((state) => state.jumpToChapter.value)
+    const maxNextChapter = useAppSelector((state) => state.maxNextChapter.value)
     
 
     const baseUrl = urlParsed.pathnameOriginal.split("/").slice(0,-1).join("/")
@@ -55,7 +56,7 @@ const PageNav = () => {
     const scroll = useScrollFade()
 
     const prev = currentChapter > 1
-    const next = currentChapter < 343
+    const next = currentChapter < maxNextChapter
     return (
         <>
         <div ref={ref} className={`dock z-10 bg-yamier text-neutral-content

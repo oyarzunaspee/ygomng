@@ -33,6 +33,7 @@ export type PageData = {
 
 export type ChapterResponse = Status & {
     pages: PageData[];
+    next_limit: number;
 }
 
 export type ComparisonResponse = Status & {
