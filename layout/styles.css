@@ -19,4 +19,22 @@
   mask: url("../../assets/kaiyami.svg") no-repeat center;
   mask-size: contain;
 }
+
+
+.coloured-slider {
+    --divider-color: var(--color-link);
+    --default-handle-color: var(--color-link);
+    --divider-width: 4px;
+    --default-handle-width: 100px;
+  }
+
+  .custom-animated-handle {
+    stroke: var(--color-link);
+    fill: var(--color-link);
+    opacity: 75%;
+  }
+
+  .custom-animated-handle:focus {
+    opacity: 0%;
+  }
 }
