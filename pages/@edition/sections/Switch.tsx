@@ -1,6 +1,6 @@
 import { Squares2X2Icon, ListBulletIcon } from "@heroicons/react/24/outline";
 import { navigate } from "vike/client/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Switch = ({ 
   listing, 
@@ -14,6 +14,12 @@ const Switch = ({
   }) => {
 
     const [editionClicked, setEditionClicked] = useState("")
+
+    useEffect(() => {
+      if (!loading) {
+        setEditionClicked("")
+      }
+    }, [loading])
 
   return (
     <>

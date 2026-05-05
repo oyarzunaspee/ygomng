@@ -75,6 +75,9 @@ const ListItem = ({
                                         " " + chap.title
                                     }
                                 </span>
+                                {loading && clickedChapter == chap.number &&
+                                    <span className="loading loading-spinner loading-xs"></span>
+                                }
                             </li>
                         )
                     })}
