@@ -4,7 +4,7 @@ const Content = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <>
-            <div className="flex flex-col mb-15 pb-5">
+            <div className="flex flex-col mb-15">
                 {children}
             </div>
             <ScrollTop />

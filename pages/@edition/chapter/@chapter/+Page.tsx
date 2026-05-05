@@ -80,7 +80,7 @@ export default function Page() {
                                 ${result.isFetching ? "blur-sm" : ""}
                                 ${page.double ? "basis-1/2" : ""}
                                 `}>
-                                <img className="z-70 border-b-2 border-dotted border-link" src={page.link} />
+                                <img className="border-b-2 border-dotted border-link" src={page.link} />
                             </div>
                         )
                     } else if (comparePages && page.content && (comparePagesList && comparePagesList.pages && page.content)) {

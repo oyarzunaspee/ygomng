@@ -35,27 +35,31 @@ export default function Page() {
 
   return (
     <>
-      <Switch 
-      listing={listing} 
-      setListing={setListing}
-      bunkoban={bunkoban}
-      loading={loading} />
+      <Switch
+        listing={listing}
+        setListing={setListing}
+        bunkoban={bunkoban}
+        loading={loading} />
 
-      {listing ?
-        <Listing
-          volumes={volumes}
-          loading={loading}
-          clickedChapter={clickedChapter}
-          setClickedChapter={setClickedChapter}
-        />
-        :
-        <Card
-          volumes={volumes}
-          loading={loading}
-          clickedChapter={clickedChapter}
-          setClickedChapter={setClickedChapter}
-        />
-      }
+
+      <div className="pb-5">
+        {listing ?
+          <Listing
+            volumes={volumes}
+            loading={loading}
+            clickedChapter={clickedChapter}
+            setClickedChapter={setClickedChapter}
+          />
+          :
+          <Card
+            volumes={volumes}
+            loading={loading}
+            clickedChapter={clickedChapter}
+            setClickedChapter={setClickedChapter}
+          />
+        }
+      </div>
+
     </>
   )
 }
