@@ -25,7 +25,7 @@ const JumpTo = () => {
 
 
     const goToChapter = () => {
-        const url = `/${bunkoban ? "bunkoban" : "original"}/chapters/${selectedChapter}`
+        const url = `/${bunkoban ? "bunkoban" : "original"}/chapter/${selectedChapter}`
         navigate(url)
     }
 
@@ -39,7 +39,7 @@ const JumpTo = () => {
                         onChange={(e) => {
                             setSelectedChapter(Number(e.target.value))
                         }}
-                        className={`select join-item bg-yami w-full
+                        className={`select join-item bg-yami w-full rounded-none
                         ${open ? "max-h-90" : "max-h-0"}
                         `}>
                         {result.data.volumes.map((vol) => {
@@ -59,7 +59,7 @@ const JumpTo = () => {
                         })}
                     </select>
                     <button
-                    className={`join-item btn bg-link text-yami
+                    className={`join-item btn bg-link text-yami rounded-none
                         ${open ? "max-h-90" : "max-h-0"}
                         `}
                         onClick={goToChapter}

@@ -7,7 +7,8 @@ import { useLazyGetComparePagesQuery } from "../../../../store/api/mangaApi";
 import { closeCompare, updateFetching, closeScreen } from "../../../../store/slices/pageMenu";
 import { setLastChapter } from "../../../../store/slices/maxNextChapter";
 import { ImgComparisonSlider } from '@img-comparison-slider/react';
-
+import { getLoading, subscribe } from "../../../../hooks/loadingState";
+import { toggleJumpTo } from "../../../../store/slices/jumpToChapter";
 import type { customPageContext } from "../../../+onCreatePageContext";
 
 import NavMenu from "./sections/NavMenu";
@@ -20,18 +21,21 @@ import type { Data } from "./+data";
 export default function Page() {
     const dispatch = useAppDispatch()
 
+    const [loading, setLoadingState] = useState(getLoading())
+
     const { pages, maxNext } = useData<Data>()
-
-    useEffect(() => {
-        dispatch(setLastChapter(maxNext))
-    }, [])
-
 
     const comparePages = useAppSelector((state) => state.pageMenu.value.compare)
 
     const [comparePagesList, setComparePagesList] = useState<ComparisonResponse | null>()
 
     const { bunkoban, currentChapter } = usePageContext() as customPageContext
+
+    useEffect(() => {
+        dispatch(toggleJumpTo(false))
+        dispatch(setLastChapter(maxNext))
+        return subscribe(setLoadingState)
+    }, [])
 
 
     useEffect(() => {
@@ -72,20 +76,20 @@ export default function Page() {
             <div className="bg-white flex flex-wrap">
                 {pages.map((page: PageData) => {
 
-                        if (!comparePages || !comparePagesList || (comparePages && comparePagesList && !page.content)) {
+                    if (!comparePages || !comparePagesList || (comparePages && comparePagesList && !page.content)) {
                         // for double pages
                         page.double ? i = -i : Math.abs(i)
                         const order = page.double ? page.number - i : page.number
                         return (
                             <div key={`list-${page.number}`} style={{ order: order }}
                                 className={`
-                                ${result.isFetching ? "blur-sm" : ""}
+                                ${result.isFetching || loading ? "blur-sm" : ""}
                                 ${page.double ? "basis-1/2" : ""}
                                 `}>
                                 <img className="border-b-2 border-dotted border-link" src={page.link} />
                             </div>
                         )
-                        } else if (comparePages && page.content && (comparePagesList && comparePagesList.pages && page.content)) {
+                    } else if (comparePages && page.content && (comparePagesList && comparePagesList.pages && page.content)) {
                         j++
                         return (
                             <>
