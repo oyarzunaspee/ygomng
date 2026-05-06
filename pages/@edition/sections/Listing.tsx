@@ -66,6 +66,7 @@ const ListItem = ({
                                     setClickedChapter(chap.number)
                                     navigate(`${urlParsed.pathnameOriginal}/chapter/${chap.number}`)
                                 }}
+                                key={chap.number}
                                 className="cursor-pointer py-3 px-10 flex justify-between text-[15px] hover:link hover:text-link not-last:border-b border-dotted border-link">
                                 <span className="hover:text-link">
                                     {chap.number}.

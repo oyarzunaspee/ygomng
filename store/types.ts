@@ -7,6 +7,9 @@ type Status = {
     status: number;
 }
 
+
+// MANGA
+
 export type ChapterData = {
     number: number;
     title: string;
@@ -39,4 +42,39 @@ export type ChapterResponse = Status & {
 export type ComparisonResponse = Status & {
     pages: Partial<PageData>[];
     page_range: number[];
+}
+
+// BOOKS
+
+export type BookData = {
+    type: string;
+    short: string;
+    _id: string;
+    cover: string;
+    title: string;
+}
+
+export type BooksResponse = Status & {
+    books: BookData[];
+}
+
+export type BookPage = {
+    number: number;
+    link: string;
+    full_link: string;
+}
+
+export type IndividualBook = {
+    type: string;
+    title: string;
+    short: string;
+    jpn: string;
+    publisher: string;
+    author: string | null;
+    year: number;
+    pages: BookPage[];
+}
+
+export type BookResponse = Status & {
+    book: IndividualBook;
 }
