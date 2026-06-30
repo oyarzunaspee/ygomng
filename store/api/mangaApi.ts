@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { ComparisonResponse, VolumeResponse } from "../types";
+import type { ComparisonResponse } from "../types";
+import type { VolumeResponse } from "../../pages/@edition/types";
 
 
 type VolumeParams = {

@@ -4,7 +4,7 @@ export type Data = Awaited<ReturnType<typeof data>>
 import type { PageContext } from "vike/types"; 
 import type { customPageContext } from "../+onCreatePageContext";
 import { render } from "vike/abort";
-import type { VolumeResponse, VolumeData } from "../../store/types";
+import type { VolumeData, VolumeResponse } from "./types";
 
  
 async function data(pageContext: customPageContext) {

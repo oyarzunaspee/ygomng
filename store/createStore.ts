@@ -6,6 +6,8 @@ import { PageContext } from "vike/types";
 import jumpToChapterSlice from "./slices/jumpToChapter";
 import pageMenuSlice from "./slices/pageMenu";
 import maxNextChapterSlice from "./slices/maxNextChapter";
+import filterSectionSlice from "./slices/filterSection";
+import screenAdjustPageSlice from "./slices/screenAdjustPage";
 
 import { authApi } from "./api/authApi";
 import { mangaApi } from "./api/mangaApi";
@@ -15,7 +17,9 @@ const reducer = combineReducers({
     [authApi.reducerPath]: authApi.reducer,
     pageMenu: pageMenuSlice,
     jumpToChapter: jumpToChapterSlice,
-    maxNextChapter: maxNextChapterSlice
+    maxNextChapter: maxNextChapterSlice,
+    filterSection: filterSectionSlice,
+    screenAdjustPage: screenAdjustPageSlice
 })
 
 

@@ -19,7 +19,7 @@ const ScrollTop = () => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     };
     return (
-        <div className={`overflow-hidden transition-height z-5 ease-in-out duration-500 fixed bottom-0 right-5
+        <div className={`overflow-hidden transition-height z-5 ease-in-out duration-500 fixed bottom-5 right-5 md:right-15 lg:right-35
                         ${scroll ? "h-35" : "h-0"}
                         `}>
             <button onClick={() => scrollToTop()} className="cursor-pointer z-5">

@@ -16,8 +16,7 @@ export type customPageContext = PageContext & {
 }
 
 export async function onCreatePageContext(pageContext: customPageContext) {
-  console.log(pageContext.routeParams.bunkoban || pageContext.routeParams.book ? true : false)
-  pageContext.fullView = pageContext.routeParams.bunkoban || pageContext.routeParams.book ? true : false
+  pageContext.fullView = pageContext.routeParams.edition || pageContext.routeParams.book ? true : false
   pageContext.bunkoban = pageContext.routeParams.edition == "bunkoban"
   pageContext.currentChapter = Number(pageContext.routeParams.chapter)
   pageContext.cookieHeader = {

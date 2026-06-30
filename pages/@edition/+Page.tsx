@@ -1,7 +1,7 @@
 import { usePageContext } from "vike-react/usePageContext";
 
-import Listing from "./sections/Listing";
-import Card from "./sections/Card";
+import List from "../../components/List";
+import Card from "../../components/Card";
 import Switch from "./sections/Switch";
 import { useData } from "vike-react/useData";
 import type { Data } from "./+data";
@@ -34,32 +34,34 @@ export default function Page() {
 
 
   return (
-    <>
-      <Switch
-        listing={listing}
-        setListing={setListing}
-        bunkoban={bunkoban}
-        loading={loading} />
+    <div className="md:flex justify-center">
+      <div className="lg:basis-1/2 md:basis-7/9">
+        <Switch
+          listing={listing}
+          setListing={setListing}
+          bunkoban={bunkoban}
+          loading={loading} />
 
 
-      <div className="pb-5">
-        {listing ?
-          <Listing
-            volumes={volumes}
-            loading={loading}
-            clickedChapter={clickedChapter}
-            setClickedChapter={setClickedChapter}
-          />
-          :
-          <Card
-            volumes={volumes}
-            loading={loading}
-            clickedChapter={clickedChapter}
-            setClickedChapter={setClickedChapter}
-          />
-        }
+        <div className="pb-5">
+          {listing ?
+            <List
+              volumes={volumes}
+              loading={loading}
+              clickedChapter={clickedChapter}
+              setClickedChapter={setClickedChapter}
+            />
+            :
+            <Card
+              volumes={volumes}
+              loading={loading}
+              clickedChapter={clickedChapter}
+              setClickedChapter={setClickedChapter}
+            />
+          }
+        </div>
       </div>
 
-    </>
+    </div>
   )
 }

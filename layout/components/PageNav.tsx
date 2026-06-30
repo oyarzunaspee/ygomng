@@ -14,7 +14,7 @@ import type { customPageContext } from "../../pages/+onCreatePageContext";
 
 
 const PageNav = () => {
-    const { 
+    const {
         urlParsed,
         currentChapter
     } = usePageContext() as customPageContext
@@ -25,15 +25,15 @@ const PageNav = () => {
     const openMenu = useAppSelector((state) => state.pageMenu.value.open)
     const openJumpTo = useAppSelector((state) => state.jumpToChapter.value)
     const maxNextChapter = useAppSelector((state) => state.maxNextChapter.value)
-    
 
-    const baseUrl = urlParsed.pathnameOriginal.split("/").slice(0,-1).join("/")
+
+    const baseUrl = urlParsed.pathnameOriginal.split("/").slice(0, -1).join("/")
     const tabs = [
         {
             name: "Prev Chapter",
             tag: "prev",
             Icon: ChevronDoubleLeftIcon,
-            link: `${baseUrl}$/${currentChapter - 1}`
+            link: `${baseUrl}/${currentChapter - 1}`
         },
         {
             name: comparePages ? "Close" : "Menu",
@@ -58,50 +58,58 @@ const PageNav = () => {
     const prev = currentChapter > 1
     const next = currentChapter < maxNextChapter
     return (
-        <>
-        <div ref={ref} className={`dock z-10 bg-yamier text-neutral-content
-        ${scroll ? "opacity-100": "opacity-0"}
+        <div className="flex fixed bottom-0 md:bottom-5 w-full justify-center z-20">
+            <div ref={ref} className={`md:basis-1/2 lg:basis-1/3 w-full md:border md:border-dashed py-5 md:border-link md:rounded-lg z-10 bg-yamier text-neutral-content
+        ${scroll || openMenu ? "opacity-100" : "opacity-0"}
         transition-opacity ease-in-out duration-500`}>
-            {tabs.map((tab) => {
-                if (tab.tag == "menu") {
-                    return (
-                        <div
-                            key={tab.tag}
-                            onClick={() => {
-                                if (comparePages) {
-                                    dispatch(toggleCompare())
-                                } else if (openJumpTo) {
-                                    dispatch(toggleJumpTo(false))
-                                } else {
-                                    dispatch(toggleMenu())
-                                }
-                            }}
-                            className="text-link">
-                            <button className="flex cursor-pointer flex-col items-center">
-                                <tab.Icon className="size-[2em] mb-1" />
-                            </button>
-                        </div>
-                    )
-                } else {
-                    return (
-                        <a
-                        key={tab.tag} 
-                        href={tab.link} 
-                        className={`
+                <div className="flex justify-center">
+                    {tabs.map((tab) => {
+                        if (tab.tag == "menu") {
+                            return (
+                                <div
+                                    key={tab.tag}
+                                    onClick={() => {
+                                        if (comparePages) {
+                                            dispatch(toggleCompare())
+                                        } else if (openJumpTo) {
+                                            dispatch(toggleJumpTo(false))
+                                        } else {
+                                            dispatch(toggleMenu())
+                                        }
+                                    }}
+                                    className="text-link basis-1/3">
+                                    <div className="flex justify-center">
+                                        <button className="flex cursor-pointer flex-col items-center">
+                                            <tab.Icon className="size-[2em] mb-1" />
+                                        </button>
+
+                                    </div>
+                                </div>
+                            )
+                        } else {
+                            return (
+                                <a
+                                    key={tab.tag}
+                                    href={tab.link}
+                                    className={`basis-1/3
                    ${(tab.tag == "prev" && !prev) || (tab.tag == "next" && !next) ? " pointer-events-none opacity-50 cursor-not-allowed" : ""}
                   `}>
-                            <button className="flex cursor-pointer flex-col items-center">
-                                <tab.Icon className="size-[1.2em] mb-1" />
-                                <span className="dock-label">
-                                    {tab.name}
-                                </span>
-                            </button>
-                        </a>
-                    )
-                }
-            })}
+                                    <div className="flex justify-center">
+                                        <button className="flex cursor-pointer flex-col items-center">
+                                            <tab.Icon className="size-[1.2em] mb-1" />
+                                            <span className="text-sm">
+                                                {tab.name}
+                                            </span>
+                                        </button>
+
+                                    </div>
+                                </a>
+                            )
+                        }
+                    })}
+                </div>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -3,7 +3,7 @@ export type Data = Awaited<ReturnType<typeof data>>
 
 import type { customPageContext } from "../../+onCreatePageContext";
 import { render } from "vike/abort";
-import { IndividualBook, BookResponse } from "../../../store/types";
+import type { BookResponse, IndividualBook } from "../types";
 
  
 async function data(pageContext: customPageContext) {

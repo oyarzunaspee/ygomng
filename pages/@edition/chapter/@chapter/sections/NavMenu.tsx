@@ -12,6 +12,7 @@ import { usePageContext } from "vike-react/usePageContext";
 import { toggleCompare, closeScreen } from "../../../../../store/slices/pageMenu";
 import { toggleJumpTo } from "../../../../../store/slices/jumpToChapter";
 import type { customPageContext } from "../../../../+onCreatePageContext";
+import { useMediaQuery } from "../../../../../hooks/mediaQuery";
 
 import JumpTo from "./JumpTo";
 
@@ -22,6 +23,7 @@ const NavMenu = () => {
     const openMenu = useAppSelector((state) => state.pageMenu.value.open)
     const openJumpTo = useAppSelector((state) => state.jumpToChapter.value)
     const isFetching = useAppSelector((state) => state.pageMenu.value.isFetching)
+    const isLG = useMediaQuery();
 
 
 
@@ -36,12 +38,11 @@ const NavMenu = () => {
             }
         },
         {
-            name: "Jump to chapter...",
-            tag: "chapter",
-            Icon: BarsArrowUpIcon,
+            name: `Compare ${bunkoban ? "Original" : "Bunkoban"} edition`,
+            tag: "compare",
+            Icon: isFetching ? ArrowPathIcon : SparklesIcon,
             onClick: () => {
-                dispatch(closeScreen())
-                dispatch(toggleJumpTo(true))
+                dispatch(toggleCompare())
             }
         },
         {
@@ -54,19 +55,20 @@ const NavMenu = () => {
             }
         },
         {
-            name: `Compare ${bunkoban ? "Original" : "Bunkoban"} edition`,
-            tag: "compare",
-            Icon: isFetching ? ArrowPathIcon : SparklesIcon,
+            name: "Jump to chapter...",
+            tag: "chapter",
+            Icon: BarsArrowUpIcon,
             onClick: () => {
-                dispatch(toggleCompare())
+                dispatch(closeScreen())
+                dispatch(toggleJumpTo(true))
             }
         }
     ]
 
     useEffect(() => {
-        if (openMenu) {
+        if (openMenu && !isLG) {
             document.body.style.overflow = "hidden"
-        } else {
+        } else if (!openMenu && !isLG) {
             document.body.style.overflow = "auto"
         }
     }, [openMenu])
@@ -75,7 +77,7 @@ const NavMenu = () => {
 
     return (
         <>
-        {openMenu &&
+        {openMenu && !isLG &&
         <div className={`bg-black z-5 w-full h-screen fixed overflow-hidden
             transition-opacity duration-300 ease-in-out
             ${openMenu ? "opacity-75" : "opacity-0"}    
@@ -83,12 +85,13 @@ const NavMenu = () => {
         }
             
             <JumpTo />
-            <div className={`           
-                    ${openMenu ? "max-h-90" : "max-h-0"}
-                    transition-height duration-300 ease-in-out
-                    fixed z-6 bottom-0 w-full left-0 bg-yami rounded-t-xl overflow-hidden
-                    `}>
-                <ul className="mb-15 px-3 py-5">
+            <div className={`
+                fixed bottom-0 md:bottom-31 left-0 flex justify-center w-full z-8`}>
+                <div className="md:basis-4/9 lg:basis-1/3 w-full">
+                    <div className={`transition-height duration-300 ease-in-out overflow-hidden
+                ${openMenu ? "max-h-90 tooltip-tail" : "max-h-0"}
+                        bg-yami md:rounded-lg  rounded-t-xl`}>
+                        <ul className="mb-20 md:mb-0 px-3 py-5">
                     {menu.map((option, i) => {
                         return (
                             <div 
@@ -104,6 +107,8 @@ const NavMenu = () => {
                         )
                     })}
                 </ul>
+                    </div>
+                </div>
             </div>
 
         </>

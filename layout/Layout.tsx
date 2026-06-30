@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <div className="min-h-screen bg-yami">
+            <div className="min-h-screen flex flex-col bg-yami">
                 {!fullView && !abortStatusCode &&
                     <div className="pt-5">
                         <Logo classes="h-40" />
@@ -33,6 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {!urlParsed.pathnameOriginal.match(regex) && !abortStatusCode &&
                     <RegularNav />
                 }
+
             </div>
         </>
     )

@@ -13,6 +13,7 @@
     "@smakss/react-scroll-direction": "^4.3.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-hook-form": "^7.75.0",
     "react-redux": "^9.2.0",
     "vike": "0.4.257",
     "vike-react": "^0.6.21",

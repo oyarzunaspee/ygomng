@@ -7,6 +7,7 @@
   --color-yami: #140824;
   --color-yamier: #07010F;
   --color-link: var(--color-violet-300);
+  --color-warning: var(--color-rose-400);
   --color-mute: var(--color-gray-300);
   --color-tograd: var(--color-violet-400);
   --color-fromgrad: #384CA3;
@@ -37,4 +38,16 @@
   .custom-animated-handle:focus {
     opacity: 0%;
   }
+
+  .tooltip-tail::after {
+  content: "";
+  position: absolute;
+  top: 99%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-width: 20px;
+  border-style: solid;
+  border-color: #140824 transparent transparent transparent; 
+}
 }

@@ -6,7 +6,7 @@ import type { PageContext } from "vike/types";
 import type { customPageContext } from "../../../+onCreatePageContext";
 import { render } from "vike/abort";
 
-import { ChapterResponse, PageData } from "../../../../store/types";
+import type { PageData, ChapterResponse } from "../../types";
 
 async function data(pageContext: customPageContext) {
 
