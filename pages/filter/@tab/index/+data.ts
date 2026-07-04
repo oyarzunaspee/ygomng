@@ -8,7 +8,7 @@ import type { VolumeData } from "../../../../store/types";
 
 async function data(pageContext: customPageContext) {
   
-  const dataUrl = `${import.meta.env.BACKEND_URL}/v1/filter/${pageContext.routeParams.tab}${pageContext.urlParsed.searchOriginal}`
+  const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/filter/${pageContext.routeParams.tab}${pageContext.urlParsed.searchOriginal}`
 
   // switch (pageContext.routeParams.tab.toLowerCase()) {
   //   case "volumes":
