@@ -11,7 +11,7 @@ export default function Page() {
 
   const handleLogin = () => {
     setIsRedirecting(true)
-    window.location.href = `${import.meta.PUBLIC_ENV__BACKEND_URL}/v1/auth/twitter`;
+    window.location.href = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/auth/twitter`;
   };
 
 
