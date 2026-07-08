@@ -11,6 +11,5 @@ export default {
   redirects: {
     "/": "/original",
   },
-  prerender: false,
-  server: true
+  prerender: false
 } satisfies Config;
