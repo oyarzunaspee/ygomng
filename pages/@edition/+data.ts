@@ -8,11 +8,10 @@ import type { VolumeData, VolumeResponse } from "./types";
 
  
 async function data(pageContext: customPageContext) {
-  
   const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga?bunkoban=${pageContext.bunkoban}`
 
   let volumeRes: VolumeResponse
-  try {
+  // try {
     const response = await fetch(dataUrl, pageContext.cookieHeader)
     volumeRes = (await response.json()) as VolumeResponse
 
@@ -24,7 +23,8 @@ async function data(pageContext: customPageContext) {
       throw render(500)
     }
      
-  } catch (err: any) {
-   
-  }
+  // } catch (err: any) {
+  //   console.log(err)
+  //     throw render(err._pageContextAbort.abortStatusCode)
+  // }
 }
