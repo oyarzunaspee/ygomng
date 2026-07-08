@@ -25,6 +25,7 @@ async function data(pageContext: customPageContext) {
     }
      
   } catch (err: any) {
+    console.log(err)
       throw render(err._pageContextAbort.abortStatusCode)
   }
 }

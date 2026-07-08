@@ -7,8 +7,7 @@ import Logo from "../../components/Logo";
 
 export default function Page() {
   const [isRedirecting, setIsRedirecting] = useState(false)
-  const { is404, abortStatusCode, res } = usePageContext();
-  console.log(res)
+  const { is404, abortStatusCode } = usePageContext();
 
   const handleLogin = () => {
     setIsRedirecting(true)
