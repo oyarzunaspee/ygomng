@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <div className="min-h-screen flex flex-col bg-yami">
-                {!fullView && !abortStatusCode &&
+                {!fullView && abortStatusCode == undefined &&
                     <div className="pt-5">
                         <Logo classes="h-40" />
                     </div>
