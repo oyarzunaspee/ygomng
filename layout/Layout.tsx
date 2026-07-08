@@ -14,7 +14,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const { urlParsed, abortStatusCode, fullView } = usePageContext() as customPageContext
     const regex = /^\/(original|bunkoban)\/chapter\/\d{1,3}$/i
 
-
     return (
         <>
             <div className="min-h-screen flex flex-col bg-yami">
