@@ -1,5 +1,5 @@
 import "./styles.css";
-
+import { Analytics } from "@vercel/analytics/next"
 import { usePageContext } from "vike-react/usePageContext";
 import type { customPageContext } from "../pages/+onCreatePageContext";
 

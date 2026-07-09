@@ -11,6 +11,7 @@
     "@img-comparison-slider/react": "^8.0.2",
     "@reduxjs/toolkit": "^2.11.2",
     "@smakss/react-scroll-direction": "^4.3.1",
+    "@vercel/analytics": "^2.0.1",
     "@vikejs/hono": "^0.2.1",
     "hono": "^4.12.28",
     "react": "^19.2.5",
