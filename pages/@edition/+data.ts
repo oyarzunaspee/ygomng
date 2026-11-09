@@ -9,7 +9,7 @@ import type { VolumeData, VolumeResponse } from "./types";
  
 async function data(pageContext: customPageContext) {
 
-    const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga?bunkoban=${pageContext.bunkoban || false}`
+    const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga?bunkoban=false`
     let volumeRes: VolumeResponse
       const response = await fetch(dataUrl)
       volumeRes = (await response.json()) as VolumeResponse
