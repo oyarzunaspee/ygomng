@@ -12,7 +12,7 @@ async function data(pageContext: customPageContext) {
 
   let volumeRes: VolumeResponse
   // try {
-    const response = await fetch(dataUrl, pageContext.cookieHeader)
+    const response = await fetch(dataUrl)
     volumeRes = (await response.json()) as VolumeResponse
 
     if (response.status == 200) {
