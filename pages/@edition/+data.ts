@@ -13,6 +13,7 @@ const url = import.meta.env.PUBLIC_ENV__BACKEND_URL
 async function data(pageContext: customPageContext) {
 
     const dataUrl = `${url}/v1/manga?bunkoban=${pageContext.bunkoban}`
+    console.log(dataUrl)
     let volumeRes: VolumeResponse
       const response = await fetch(dataUrl)
       volumeRes = (await response.json()) as VolumeResponse
