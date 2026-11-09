@@ -6,10 +6,13 @@ import type { customPageContext } from "../+onCreatePageContext";
 import { render } from "vike/abort";
 import type { VolumeData, VolumeResponse } from "./types";
 
+
+const url = import.meta.env.PUBLIC_ENV__BACKEND_URL
+
  
 async function data(pageContext: customPageContext) {
 
-    const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga?bunkoban=false`
+    const dataUrl = `${url}/v1/manga?bunkoban=${pageContext.bunkoban}`
     let volumeRes: VolumeResponse
       const response = await fetch(dataUrl)
       volumeRes = (await response.json()) as VolumeResponse
