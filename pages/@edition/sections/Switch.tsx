@@ -23,7 +23,7 @@ const Switch = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mt-10 text-purple-300 px-10">
+      <div className="flex justify-between items-center mt-10 text-link px-10">
         <div className="flex">
           {["Original", "Bunkoban"].map((edition: string) => {
             return (

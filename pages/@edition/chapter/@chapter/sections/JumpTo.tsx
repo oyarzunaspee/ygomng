@@ -118,7 +118,7 @@ const Desktop = ({ open, setSelectedChapter, volumes, currentChapter, goToChapte
         dispatch(toggleJumpTo(false))
     })
     return (
-        <div className={`fixed left-0 top-0
+        <div className={`fixed left-0 top-0 text-white
                 transition-width duration-600 ease-in-out
                 ${open ? "max-w-500" : "max-w-0 overflow-hidden"}
                 `}>

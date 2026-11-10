@@ -2,8 +2,6 @@
 @plugin "../node_modules/daisyui/index.js";
 
 @theme {
-  --color-logo-1: #F74531;
-  --color-logo-2: #384CA3;
   --color-yami: #140824;
   --color-yamier: #07010F;
   --color-link: var(--color-violet-300);

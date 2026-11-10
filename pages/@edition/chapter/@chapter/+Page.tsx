@@ -29,10 +29,12 @@ export default function Page() {
 
     const clickedDoublePage = useRef<HTMLDivElement | null>(null);
 
-    const handleClickDoublePage = (e: React.MouseEvent<HTMLDivElement>) => {
-        clickedDoublePage.current = e.currentTarget;
-        setExpandedDoublePages(!expandedDoublePages)
-        clickedDoublePage.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const handleClickDoublePage = (e: React.MouseEvent<HTMLDivElement>, double: boolean) => {
+        if (double) {
+            clickedDoublePage.current = e.currentTarget;
+            setExpandedDoublePages(!expandedDoublePages)
+            clickedDoublePage.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
     };
 
 
@@ -102,7 +104,7 @@ export default function Page() {
                         const isRightDoublePage = page.double && i == -1
                         return (
                             <div
-                             onClick={handleClickDoublePage}
+                             onClick={(e) => handleClickDoublePage(e, page.double)}
                                 key={`list-${page.number}`}
                                 style={{ order: order }}
                                 className={`

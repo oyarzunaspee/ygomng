@@ -85,7 +85,7 @@ const NavMenu = () => {
         }
             
             <JumpTo />
-            <div className={`
+            <div className={`text-white
                 fixed bottom-0 md:bottom-31 left-0 flex justify-center w-full z-8`}>
                 <div className="md:basis-4/9 lg:basis-1/3 w-full">
                     <div className={`transition-height duration-300 ease-in-out overflow-hidden
