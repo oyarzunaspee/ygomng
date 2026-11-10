@@ -25,6 +25,16 @@ export default function Page() {
     const isLG = useMediaQuery();
 
     const [loading, setLoadingState] = useState(getLoading())
+    const [expandedDoublePages, setExpandedDoublePages] = useState(false)
+
+    const clickedDoublePage = useRef<HTMLDivElement | null>(null);
+
+    const handleClickDoublePage = (e: React.MouseEvent<HTMLDivElement>) => {
+        clickedDoublePage.current = e.currentTarget;
+        setExpandedDoublePages(!expandedDoublePages)
+        clickedDoublePage.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
 
     const { pages, maxNext } = useData<Data>()
 
@@ -80,27 +90,36 @@ export default function Page() {
             }
             <NavMenu />
             <ProgressBar />
-            <div className={`bg-white md:bg-yamier flex flex-wrap md:justify-center md:items-center
-                ${isLG ? "md:flex-col" : ""}
+            <div className={`bg-white md:bg-yamier flex flex-wrap md:justify-center md:items-center 
                 `}>
                 {pages.map((page: PageData) => {
 
                     if (!comparePages || !comparePagesList || (comparePages && comparePagesList && !page.content)) {
-                        // for double pages
+                        // for double pages, place second page before first page to accomodate japanese reading order
                         page.double ? i = -i : Math.abs(i)
                         const order = page.double ? page.number - i : page.number
+                        const isLeftDoublePage = page.double && i == 1
+                        const isRightDoublePage = page.double && i == -1
                         return (
-                            <div key={`list-${page.number}`} style={{ order: order }}
+                            <div
+                             onClick={handleClickDoublePage}
+                                key={`list-${page.number}`}
+                                style={{ order: order }}
                                 className={`
+                                ${page.double ? "cursor-pointer" : ""}
                                 ${result.isFetching || loading ? "blur-sm" : ""}
-                                ${page.double ? "basis-1/2" : ""}
+                                ${!expandedDoublePages && page.double ? "basis-1/2" : "basis-full justify-center flex"}
+                                ${!expandedDoublePages && isLeftDoublePage ? "justify-end flex" : ""}
+                                ${!expandedDoublePages && isRightDoublePage ? "justify-start flex" : ""}
                                 `}>
-
-                                <img className={`
+                                <img
+                                   
+                                    className={`
                                     ${isLG && screenAdjustPage ? "h-screen" : ""}
+                                    
                                     border-b-2 border-dotted border-link
                                 `} src={page.link} />
-                                    </div>
+                            </div>
                         )
                     } else if (comparePages && page.content && (comparePagesList && comparePagesList.pages && page.content)) {
                         j++
@@ -138,8 +157,8 @@ const PageComparison = ({ page, comparePages, i }: { page: PageData, comparePage
 
         <div style={{ order: page.number }} className="basis-full slider-wrapper">
             <ImgComparisonSlider className="coloured-slider">
-                <img ref={first} slot="first" src={page.link} className={`${isLG && screenAdjustPage ? "max-h-screen" : "" }`} />
-                <img ref={second} slot="second" className={`${isLG && screenAdjustPage ? "max-h-screen" : "" }`} src={comparePages ? comparePages[i - 1]?.link : ""} />
+                <img ref={first} slot="first" src={page.link} className={`${isLG && screenAdjustPage ? "max-h-screen" : ""}`} />
+                <img ref={second} slot="second" className={`${isLG && screenAdjustPage ? "max-h-screen" : ""}`} src={comparePages ? comparePages[i - 1]?.link : ""} />
                 <svg slot="handle" className="custom-animated-handle" xmlns="http://www.w3.org/2000/svg" width="100" viewBox="-8 -3 16 6">
                     <path d="M -5 -2 L -7 0 L -5 2 M -5 -2 L -5 2 M 5 -2 L 7 0 L 5 2 M 5 -2 L 5 2" stroke-width="1" vector-effect="non-scaling-stroke"></path>
                 </svg>
