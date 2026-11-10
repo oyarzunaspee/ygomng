@@ -16,8 +16,8 @@
 @layer components {
 
 .logo {
-  -webkit-mask: url("../../assets/kaiyami.svg") no-repeat center;
-  mask: url("../../assets/kaiyami.svg") no-repeat center;
+  -webkit-mask: url("/assets/kaiyami.svg") no-repeat center;
+  mask: url("/assets/kaiyami.svg") no-repeat center;
   mask-size: contain;
 }
 
