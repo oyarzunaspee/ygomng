@@ -7,8 +7,7 @@ import Logo from "../../components/Logo";
 
 export default function Page() {
   const [isRedirecting, setIsRedirecting] = useState(false)
-  const { is404 } = usePageContext();
-  console.log(usePageContext())
+  const { is404, abortStatusCode } = usePageContext();
 
   const handleLogin = () => {
     setIsRedirecting(true)
@@ -21,7 +20,7 @@ export default function Page() {
     <div className="flex flex-col h-screen justify-center items-center">
 
       <Logo classes="animate-bounce h-60" />
-        {/* {abortStatusCode === 401 &&
+        {abortStatusCode === 401 &&
         <>
         <button 
         className="border-link text-link bg-transparent px-12 btn relative"
@@ -32,7 +31,7 @@ export default function Page() {
           }
         </button>
         </>
-        } */}
+        }
         {is404 &&
         <>
         <h1 className="text-[25px] my-2">
@@ -40,7 +39,7 @@ export default function Page() {
         </h1>
         </>
         }
-        {/* {(abortStatusCode != 401 && !is404) &&
+        {(abortStatusCode != 401 && !is404) &&
         <>
         <h1 className="text-[25px] my-2">
           Something went wrong
@@ -49,8 +48,8 @@ export default function Page() {
           idk man let's pray
         </span>
         </>
-        } */}
-        {/* {abortStatusCode != 401 &&
+        }
+        {abortStatusCode != 401 &&
         <div 
         onClick={() => {
           navigate("/")
@@ -61,7 +60,7 @@ export default function Page() {
             back home
           </small>
         </div>
-        } */}
+        }
 
     </div>
     </>
