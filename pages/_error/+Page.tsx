@@ -21,16 +21,10 @@ export default function Page() {
 
       <Logo classes="animate-bounce h-60" />
         {abortStatusCode === 401 &&
-        <>
-        <button 
-        className="border-link text-link bg-transparent px-12 btn relative"
-        onClick={handleLogin}>
-          access with twitter
-          {isRedirecting &&
-          <span className="loading absolute text-link right-4 loading-spinner loading-sm"></span>
-          }
-        </button>
-        </>
+        <h1 className="text-[25px] my-2">
+          Not available rn
+        </h1>
+       
         }
         {is404 &&
         <>
