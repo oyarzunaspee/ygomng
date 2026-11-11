@@ -9,7 +9,6 @@ import PagesResults from "./sections/PagesResults";
 export default function Page() {
     const { routeParams } = usePageContext()
     const { result } = useData<Data>()
-    console.log(result)
     switch (routeParams.tab.toLowerCase()) {
         case "volumes":
             return (

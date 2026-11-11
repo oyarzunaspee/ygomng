@@ -5,7 +5,6 @@ import { usePageContext } from "vike-react/usePageContext";
 const ChaptersResults = () => {
     const { result } = useData<Data>()
     const { routeParams } = usePageContext()
-    console.log(result)
     return (
         <>
         {result.map((chapter) => {

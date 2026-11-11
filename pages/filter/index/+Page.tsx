@@ -27,7 +27,7 @@ export type FormType = {
 
 export default function Page() {
     const {urlParsed} = usePageContext()
-    console.log(urlParsed)
+
     const dispatch = useAppDispatch()
     const tabOpen = useAppSelector((state) => state.filterSection.value)
     const [filterAllowed, setFilterAllowed] = useState(true)

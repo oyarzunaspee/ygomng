@@ -12,6 +12,10 @@ import { toggleJumpTo } from "../../../../store/slices/jumpToChapter";
 import type { customPageContext } from "../../../+onCreatePageContext";
 import { useMediaQuery } from "../../../../hooks/mediaQuery";
 
+import {
+    Comparison, ComparisonHandle, ComparisonItem,
+} from "../../../../src/components/ui/comparison";
+
 import ScalePage from "./sections/ScalePage";
 import NavMenu from "./sections/NavMenu";
 import ProgressBar from "./sections/ProgressBar";
@@ -62,13 +66,10 @@ export default function Page() {
 
     const [trigger, result] = useLazyGetComparePagesQuery();
 
-    useEffect(() => {
-        dispatch(closeScreen())
-    }, [result.isSuccess])
 
     useEffect(() => {
         dispatch(updateFetching(result.isFetching))
-    }, [result.isFetching])
+    }, [result.isLoading])
 
     useEffect(() => {
         if (comparePages) {
@@ -77,8 +78,9 @@ export default function Page() {
     }, [comparePages])
 
     useEffect(() => {
+        dispatch(closeScreen())
         setComparePagesList(result.data)
-    }, [result.data])
+    }, [result.isSuccess])
 
 
 
@@ -104,7 +106,7 @@ export default function Page() {
                         const isRightDoublePage = page.double && i == -1
                         return (
                             <div
-                             onClick={(e) => handleClickDoublePage(e, page.double)}
+                                onClick={(e) => handleClickDoublePage(e, page.double)}
                                 key={`list-${page.number}`}
                                 style={{ order: order }}
                                 className={`
@@ -115,7 +117,7 @@ export default function Page() {
                                 ${!expandedDoublePages && isRightDoublePage ? "justify-start flex" : ""}
                                 `}>
                                 <img
-                                   
+
                                     className={`
                                     ${isLG && screenAdjustPage ? "h-screen" : ""}
                                     
@@ -157,14 +159,29 @@ const PageComparison = ({ page, comparePages, i }: { page: PageData, comparePage
 
     return (
 
-        <div style={{ order: page.number }} className="basis-full slider-wrapper">
-            <ImgComparisonSlider className="coloured-slider">
-                <img ref={first} slot="first" src={page.link} className={`${isLG && screenAdjustPage ? "max-h-screen" : ""}`} />
-                <img ref={second} slot="second" className={`${isLG && screenAdjustPage ? "max-h-screen" : ""}`} src={comparePages ? comparePages[i - 1]?.link : ""} />
-                <svg slot="handle" className="custom-animated-handle" xmlns="http://www.w3.org/2000/svg" width="100" viewBox="-8 -3 16 6">
-                    <path d="M -5 -2 L -7 0 L -5 2 M -5 -2 L -5 2 M 5 -2 L 7 0 L 5 2 M 5 -2 L 5 2" stroke-width="1" vector-effect="non-scaling-stroke"></path>
-                </svg>
-            </ImgComparisonSlider>
+        <div className="basis-full" style={{ order: page.number }}>
+            <div className="flex justify-center">
+                <div className="basis-1/2">
+                    <Comparison className="aspect-2/3">
+                        <ComparisonItem position="start">
+                            <img
+                                alt="Before: the valley in black and white"
+                                className=" size-full object-cover"
+                                src={page.link}
+                            />
+                        </ComparisonItem>
+                        <ComparisonItem position="end">
+                            <img
+                                alt="After: the valley in colour"
+                                className="size-full object-cover"
+                                src={comparePages ? comparePages[i - 1]?.link : ""}
+                            />
+                        </ComparisonItem>
+                        <ComparisonHandle />
+                    </Comparison>
+                </div>
+            </div>
         </div>
+
     )
 }
