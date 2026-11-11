@@ -159,21 +159,22 @@ const PageComparison = ({ page, comparePages, i }: { page: PageData, comparePage
 
     return (
 
-        <div className="basis-full" style={{ order: page.number }}>
+        <div className="basis-full" style={{ order: page.number }} >
             <div className="flex justify-center">
-                <div className="basis-1/2">
-                    <Comparison className="aspect-2/3">
+                <div className={`basis-1/2 ${isLG && screenAdjustPage ? "" : "bg-white"}`}>
+                    <Comparison className={`${isLG && screenAdjustPage ? "aspect-4/5" : "aspect-2/3"}`}>
                         <ComparisonItem position="start">
                             <img
-                                alt="Before: the valley in black and white"
-                                className=" size-full object-cover"
+                                className={`object-cover 
+                                ${isLG && screenAdjustPage ? "h-screen" : "size-full border-b-2 border-dotted border-link"}`}
                                 src={page.link}
                             />
                         </ComparisonItem>
                         <ComparisonItem position="end">
                             <img
-                                alt="After: the valley in colour"
-                                className="size-full object-cover"
+                                className={`object-cover 
+                                
+                                ${isLG && screenAdjustPage ? "h-screen" : "size-full border-b-2 border-dotted border-link"}`}
                                 src={comparePages ? comparePages[i - 1]?.link : ""}
                             />
                         </ComparisonItem>

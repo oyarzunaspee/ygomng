@@ -304,7 +304,7 @@ export const ComparisonHandle = (props: React.ComponentProps<"div">) => {
           <span
             aria-hidden="true"
             className={cn(
-              "relative z-10 flex items-center justify-center rounded-sm bg-background px-0.5 py-1 shadow-sm",
+              "relative z-10 flex items-center justify-center rounded-sm bg-link px-0.5 py-1 shadow-sm",
               "group-focus-visible/comparison-handle:flex! group-data-[mode=hover]/comparison:hidden",
               "group-focus-visible/comparison-handle:ring-[3px] group-focus-visible/comparison-handle:ring-ring/50"
             )}
@@ -312,7 +312,7 @@ export const ComparisonHandle = (props: React.ComponentProps<"div">) => {
           >
             <GripVerticalIcon
               aria-hidden="true"
-              className="size-4 text-muted-foreground"
+              className="size-4 text-white"
             />
           </span>
         </>
