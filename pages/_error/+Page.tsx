@@ -17,7 +17,7 @@ export default function Page() {
 
   return (
     <>
-    <div className="flex flex-col h-screen justify-center items-center">
+    <div className="flex flex-col h-screen text-white justify-center items-center">
 
       <Logo classes="animate-bounce h-60" />
         {abortStatusCode === 401 &&
