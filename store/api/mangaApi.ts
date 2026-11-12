@@ -14,7 +14,7 @@ type ChapterParams = VolumeParams & {
 export const mangaApi = createApi({
     reducerPath: "mangaApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "/api/manga",
+        baseUrl: "/api/v1/manga",
         credentials: "include",
     }),
     endpoints: (builder) => ({
