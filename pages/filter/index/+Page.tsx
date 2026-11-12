@@ -78,6 +78,9 @@ export default function Page() {
 
     return (
         <>
+        <div className="md:flex justify-center">
+        <div className="lg:basis-1/2">
+       
             <div className="tabs tabs-lift mt-10 flex px-5 mb-10 text-white">
                 {tabs.map((tab) => {
                     return (
@@ -128,6 +131,8 @@ export default function Page() {
                     </div>
                 </div>
             </div>
+             </div>
+             </div>
         </>
     )
 }

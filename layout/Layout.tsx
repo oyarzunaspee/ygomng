@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <>
             <div className="min-h-screen flex flex-col bg-yami">
                 {fullView && abortStatusCode == undefined &&
-                    <div className="pt-5">
+                    <div className="pt-5 mb-5">
                         <Splash classes="h-40" />
                     </div>
                 }
