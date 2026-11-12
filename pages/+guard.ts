@@ -5,7 +5,6 @@ import type { PageContext } from "vike/types";
  
  
 async function guard(pageContext: PageContext) {
-    console.log(pageContext.urlParsed)
 
     const filter = pageContext.urlParsed.pathnameOriginal.startsWith("/filter")
     const books = pageContext.urlParsed.pathnameOriginal.startsWith("/books")
