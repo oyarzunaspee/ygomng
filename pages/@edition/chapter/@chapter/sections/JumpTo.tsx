@@ -69,7 +69,7 @@ type JumpToProps = {
 
 const Mobile = ({ open, setSelectedChapter, volumes, currentChapter, goToChapter }: JumpToProps) => {
     return (
-        <div className={`transition-height duration-600 ease-in-out overflow-hidden
+        <div className={`transition-height duration-600 ease-in-out overflow-hidden text-white
                     ${open ? "max-h-90" : "max-h-0"}
                     w-full join fixed inset z-90`}>
             <select
