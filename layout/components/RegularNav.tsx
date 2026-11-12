@@ -39,13 +39,14 @@ const RegularNav = () => {
                         return (
                             <a
                                 key={tab.name}
-                                href={tab.link}
+                                href={tab.name == "Manga" ? tab.link : ""}
                                 className={`basis-1/3
+                                ${tab.name == "Manga" ? "" : "pointer-events-none"}
                                 ${urlParsed.pathnameOriginal.startsWith(tab.link) ? "text-link" : ""}
                                 `}>
                                 <div className="flex justify-around">
 
-                                    <button className="flex cursor-pointer flex-col items-center">
+                                    <button className={`flex ${tab.name == "Manga" ? "cursor-pointer" : "opacity-50"} flex-col items-center`}>
                                         <tab.Icon className="size-[1.2em] mb-1" />
                                         <span className="text-sm">
                                             {tab.name}

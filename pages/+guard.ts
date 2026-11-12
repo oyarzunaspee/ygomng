@@ -11,7 +11,7 @@ async function guard(pageContext: PageContext) {
     const books = pageContext.urlParsed.pathnameOriginal.startsWith("/books")
     const bunkoban = ["original", "bunkoban"].includes(pageContext.routeParams.edition)
 
-    if (!filter && !books && !bunkoban) {
+    if (!bunkoban) {
         throw render(404)
   }
 }
