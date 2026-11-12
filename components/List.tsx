@@ -52,10 +52,12 @@ const ListItem = ({
     const { urlParsed, bunkoban } = usePageContext() as customPageContext
 
     return (
-        <div tabIndex={0} className="collapse collapse-arrow cursor-pointer">
+        <div tabIndex={0} className="collapse collapse-arrow text-white cursor-pointer">
             <div className="collapse-title font-semibold">
                 Volume {counter}
+                <span className="opacity-75">
                 {!bunkoban && `: ${title}`}
+                </span>
             </div>
             <div className="collapse-content text-sm">
                 <ul>
