@@ -78,7 +78,7 @@ export default function Page() {
 
     return (
         <>
-            <div className="tabs tabs-lift mt-10 flex px-5 mb-10">
+            <div className="tabs tabs-lift mt-10 flex px-5 mb-10 text-white">
                 {tabs.map((tab) => {
                     return (
                         <div
