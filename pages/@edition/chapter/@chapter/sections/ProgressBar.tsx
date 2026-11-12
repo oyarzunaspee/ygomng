@@ -18,8 +18,8 @@ const ProgressBar = () => {
     }, []);
 
     useEffect(() => {
-        if (ref.current) {ref.current.style.width = `${progress}%`}
-        
+        if (ref.current) { ref.current.style.width = `${progress}%` }
+
     }, [progress])
 
     return (

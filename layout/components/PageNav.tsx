@@ -92,8 +92,10 @@ const PageNav = () => {
                                     key={tab.tag}
                                     href={tab.link}
                                     className={`basis-1/3
-                   ${(tab.tag == "prev" && !prev) || (tab.tag == "next" && !next) ? " pointer-events-none opacity-50 cursor-not-allowed" : ""}
-                  `}>
+                                    ${(tab.tag == "prev" && !prev) || 
+                                    (tab.tag == "next" && !next) ? 
+                                    " pointer-events-none opacity-50 cursor-not-allowed" : ""}
+                                    `}>
                                     <div className="flex justify-center">
                                         <button className="flex cursor-pointer flex-col items-center">
                                             <tab.Icon className="size-[1.2em] mb-1" />
@@ -101,7 +103,6 @@ const PageNav = () => {
                                                 {tab.name}
                                             </span>
                                         </button>
-
                                     </div>
                                 </a>
                             )

@@ -31,7 +31,6 @@ const RegularNav = () => {
     const scroll = useScrollFade()
     return (
         <div className="flex fixed bottom-0 md:bottom-5 w-full justify-center">
-
             <div className={`z-10 md:basis-1/2 lg:basis-1/3 w-full md:border md:border-dashed md:border-link bg-yamier text-neutral-content py-5 md:rounded-lg
         ${fullView && (scroll ? "opacity-100" : "opacity-0")}
         transition-opacity ease-in-out duration-500`}>
@@ -42,8 +41,8 @@ const RegularNav = () => {
                                 key={tab.name}
                                 href={tab.link}
                                 className={`basis-1/3
-                    ${urlParsed.pathnameOriginal.startsWith(tab.link) ? "text-link" : ""}
-                    `}>
+                                ${urlParsed.pathnameOriginal.startsWith(tab.link) ? "text-link" : ""}
+                                `}>
                                 <div className="flex justify-around">
 
                                     <button className="flex cursor-pointer flex-col items-center">
@@ -58,7 +57,6 @@ const RegularNav = () => {
                     })}
                 </div>
             </div>
-
         </div>
 
     )

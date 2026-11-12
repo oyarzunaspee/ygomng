@@ -1,6 +1,11 @@
 import { useLazyGetVolumesQuery } from "../../../../../store/api/mangaApi";
 import { useAppSelector, useAppDispatch } from "../../../../../store/hooks";
-import { useState, useEffect, MouseEventHandler, useRef } from "react";
+import {
+    useState,
+    useEffect,
+    MouseEventHandler,
+    useRef
+} from "react";
 import { navigate } from "vike/client/router";
 import { usePageContext } from "vike-react/usePageContext";
 import type { customPageContext } from "../../../../+onCreatePageContext";
@@ -11,7 +16,7 @@ import { toggleJumpTo } from "../../../../../store/slices/jumpToChapter";
 
 
 const JumpTo = () => {
-    
+
     const { bunkoban, currentChapter } = usePageContext() as customPageContext
     const isLG = useMediaQuery();
 

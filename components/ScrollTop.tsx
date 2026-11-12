@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import useDetectScroll from "@smakss/react-scroll-direction";
 
 const ScrollTop = () => {
-    const {scrollDir, scrollPosition} = useDetectScroll();
+    const { scrollDir, scrollPosition } = useDetectScroll();
     const [scroll, setScroll] = useState<boolean>(false);
-    
+
     useEffect(() => {
         if (scrollDir == "up" && scrollPosition.top > window.innerHeight) {
             setScroll(true);

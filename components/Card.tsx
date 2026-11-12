@@ -111,7 +111,6 @@ const CardItem = ({
                         </ul>
                     </div>
                 </div>
-
             </div>
         </>
     )

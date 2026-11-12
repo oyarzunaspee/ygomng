@@ -10,22 +10,26 @@ import type { PageData, ChapterResponse } from "../../types";
 
 async function data(pageContext: customPageContext) {
 
-  const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga/${pageContext.routeParams.chapter}/pages?bunkoban=${pageContext.bunkoban}`
+  const dataUrl = `${import.meta.env.PUBLIC_ENV__MANGA}/v1/manga/${pageContext.routeParams.chapter}/pages?bunkoban=${pageContext.bunkoban}`
+
+  const response = await fetch(dataUrl, pageContext.cookieHeader)
 
   let chapterRes: ChapterResponse
 
-  try {
-    const response = await fetch(dataUrl, pageContext.cookieHeader)
-    chapterRes = (await response.json()) as ChapterResponse
-
-    if (response.status == 200) {
-      return { pages: chapterRes.pages as PageData[], maxNext: chapterRes.next_limit}
-    } else if (response.status == 401) {
-      throw render(401)
-    } else {
-      throw render(500)
+  if (response.status === 401) throw render(401);
+    if (!response.ok) throw render(500);
+  
+    try {
+      chapterRes = await response.json() as ChapterResponse;
+    } catch (err) {
+      // vercel authentication
+      if (err instanceof SyntaxError) {
+        throw render(401);
+      }
+  
+      throw err;
     }
-  } catch (err: any) {
-    throw render(err._pageContextAbort.abortStatusCode)
-  }
+
+    return { pages: chapterRes.pages as PageData[], maxNext: chapterRes.next_limit}
+
 }

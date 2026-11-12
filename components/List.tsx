@@ -56,7 +56,7 @@ const ListItem = ({
             <div className="collapse-title font-semibold">
                 Volume {counter}
                 <span className="opacity-75">
-                {!bunkoban && `: ${title}`}
+                    {!bunkoban && `: ${title}`}
                 </span>
             </div>
             <div className="collapse-content text-sm">

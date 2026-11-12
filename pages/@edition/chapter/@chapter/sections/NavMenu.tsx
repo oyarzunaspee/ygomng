@@ -73,17 +73,17 @@ const NavMenu = () => {
         }
     }, [openMenu])
 
-     
+
 
     return (
         <>
-        {openMenu && !isLG &&
-        <div className={`bg-black z-5 w-full h-screen fixed overflow-hidden
+            {openMenu && !isLG &&
+                <div className={`bg-black z-5 w-full h-screen fixed overflow-hidden
             transition-opacity duration-300 ease-in-out
             ${openMenu ? "opacity-75" : "opacity-0"}    
             `}></div>
-        }
-            
+            }
+
             <JumpTo />
             <div className={`text-white
                 fixed bottom-0 md:bottom-31 left-0 flex justify-center w-full z-8`}>
@@ -92,21 +92,22 @@ const NavMenu = () => {
                 ${openMenu ? "max-h-90 tooltip-tail" : "max-h-0"}
                         bg-yami md:rounded-lg  rounded-t-xl`}>
                         <ul className="mb-20 md:mb-0 px-3 py-5">
-                    {menu.map((option, i) => {
-                        return (
-                            <div 
-                            onClick={option.onClick}
-                            key={i} className="flex px-5 rounded-lg cursor-pointer py-2 justify-between hover:bg-yamier hover:text-link">
-                                <span className="text-[18px]">
-                                    {option.name}
-                                </span>
-                                <option.Icon className={`
+                            {menu.map((option, i) => {
+                                return (
+                                    <div
+                                        onClick={option.onClick}
+                                        key={i} 
+                                        className="flex px-5 rounded-lg cursor-pointer py-2 justify-between hover:bg-yamier hover:text-link">
+                                        <span className="text-[18px]">
+                                            {option.name}
+                                        </span>
+                                        <option.Icon className={`
                                 ${isFetching && option.tag == "compare" ? "animate-spin" : ""}    
                                 size-6`} />
-                            </div>
-                        )
-                    })}
-                </ul>
+                                    </div>
+                                )
+                            })}
+                        </ul>
                     </div>
                 </div>
             </div>

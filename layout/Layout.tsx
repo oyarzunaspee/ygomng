@@ -1,5 +1,4 @@
 import "./styles.css";
-import { Analytics } from "@vercel/analytics/react"
 import { usePageContext } from "vike-react/usePageContext";
 import type { customPageContext } from "../pages/+onCreatePageContext";
 
@@ -7,7 +6,7 @@ import RegularNav from "./components/RegularNav";
 import PageNav from "./components/PageNav";
 import Content from "./components/Content";
 
-import Logo from "../components/Logo";
+import Splash from "../components/Splash";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -19,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="min-h-screen flex flex-col bg-yami">
                 {!fullView && abortStatusCode == undefined &&
                     <div className="pt-5">
-                        <Logo classes="h-40" />
+                        <Splash classes="h-40" />
                     </div>
                 }
                 <Content>

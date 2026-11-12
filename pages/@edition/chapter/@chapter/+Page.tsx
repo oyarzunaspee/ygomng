@@ -4,7 +4,11 @@ import { useEffect, useState, useRef } from "react";
 
 import type { ComparisonResponse, PageData } from "./types";
 import { useLazyGetComparePagesQuery } from "../../../../store/api/mangaApi";
-import { closeCompare, updateFetching, closeScreen } from "../../../../store/slices/pageMenu";
+import {
+    closeCompare,
+    updateFetching,
+    closeScreen
+} from "../../../../store/slices/pageMenu";
 import { setLastChapter } from "../../../../store/slices/maxNextChapter";
 import { ImgComparisonSlider } from '@img-comparison-slider/react';
 import { getLoading, subscribe } from "../../../../hooks/loadingState";
@@ -13,7 +17,9 @@ import type { customPageContext } from "../../../+onCreatePageContext";
 import { useMediaQuery } from "../../../../hooks/mediaQuery";
 
 import {
-    Comparison, ComparisonHandle, ComparisonItem,
+    Comparison,
+    ComparisonHandle,
+    ComparisonItem,
 } from "../../../../src/components/ui/comparison";
 
 import ScalePage from "./sections/ScalePage";

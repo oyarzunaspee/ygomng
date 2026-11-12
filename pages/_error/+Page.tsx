@@ -3,28 +3,27 @@ import { usePageContext } from "vike-react/usePageContext";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 import { navigate } from "vike/client/router";
 
-import Logo from "../../components/Logo";
+import Splash from "../../components/Splash";
 
 export default function Page() {
-  const [isRedirecting, setIsRedirecting] = useState(false)
+  // const [isRedirecting, setIsRedirecting] = useState(false)
   const { is404, abortStatusCode } = usePageContext();
 
-  const handleLogin = () => {
-    setIsRedirecting(true)
-    window.location.href = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/auth/twitter`;
-  };
+  // const handleLogin = () => {
+  //   setIsRedirecting(true)
+  //   window.location.href = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/auth/twitter`;
+  // };
 
 
   return (
     <>
     <div className="flex flex-col h-screen text-white justify-center items-center">
 
-      <Logo classes="animate-bounce h-60" />
+      <Splash classes="animate-bounce h-60" />
         {abortStatusCode === 401 &&
         <h1 className="text-[25px] my-2">
           Not available rn
         </h1>
-       
         }
         {is404 &&
         <>
