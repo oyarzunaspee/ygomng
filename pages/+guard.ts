@@ -5,9 +5,10 @@ import type { PageContext } from "vike/types";
  
  
 async function guard(pageContext: PageContext) {
+    console.log(pageContext.urlParsed)
 
-    const filter = pageContext.urlOriginal.startsWith("/filter")
-    const books = pageContext.urlOriginal.startsWith("/books")
+    const filter = pageContext.urlParsed.pathnameOriginal.startsWith("/filter")
+    const books = pageContext.urlParsed.pathnameOriginal.startsWith("/books")
     const bunkoban = ["original", "bunkoban"].includes(pageContext.routeParams.edition)
 
     if (!filter && !books && !bunkoban) {
