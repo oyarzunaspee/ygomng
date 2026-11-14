@@ -11,12 +11,13 @@ import Splash from "../components/Splash";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const { urlParsed, abortStatusCode, fullView } = usePageContext() as customPageContext
+
     const regex = /^\/(original|bunkoban)\/chapter\/\d{1,3}$/i
 
     return (
         <>
             <div className="min-h-screen flex flex-col bg-yami">
-                {!fullView && abortStatusCode == undefined &&
+                {!fullView && abortStatusCode != undefined &&
                     <div className="pt-5">
                         <Splash classes="h-40" />
                     </div>
@@ -25,10 +26,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     {children}
                 </Content>
 
-                {urlParsed.pathnameOriginal.match(regex) && !abortStatusCode &&
+                {urlParsed.pathnameOriginal.match(regex) && abortStatusCode != undefined &&
                     <PageNav />
                 }
-                {!urlParsed.pathnameOriginal.match(regex) && !abortStatusCode &&
+                {!urlParsed.pathnameOriginal.match(regex) && abortStatusCode != undefined &&
                     <RegularNav />
                 }
 
