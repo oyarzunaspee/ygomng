@@ -20,7 +20,7 @@ import {
     Comparison,
     ComparisonHandle,
     ComparisonItem,
-} from "../../../../src/components/ui/comparison";
+} from "../../../../components/shadcn/components/ui/comparison";
 
 import ScalePage from "./sections/ScalePage";
 import NavMenu from "./sections/NavMenu";
