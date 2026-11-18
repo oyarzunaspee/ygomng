@@ -2,7 +2,12 @@ import { useData } from "vike-react/useData";
 import type { Data } from "./+data";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
-import { useForm, SubmitHandler, Control, useWatch } from "react-hook-form"
+import {
+    useForm,
+    SubmitHandler,
+    Control,
+    useWatch
+} from "react-hook-form"
 import EditionSelect from "./sections/EditionSelect";
 import SagaSelect from "./sections/SagaSelect";
 import ArcSelect from "./sections/ArcSelect";
@@ -14,28 +19,63 @@ import type { CharacterType } from "./+data";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { swapFilterSection } from "../../../store/slices/filterSection";
 import { usePageContext } from "vike-react/usePageContext";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup"
 
 
 export type FormType = {
     bunkoban: boolean;
-    saga: string;
-    arc: string[];
-    duel: string[];
-    characters: string[];
-    pageFilters: string[];
+    saga: string | null;
+    arc: number[] | null;
+    duel: string[] | null;
+    characters: string[] | null;
+    page_filter: string | null;
 }
 
+
 export default function Page() {
-    const {urlParsed} = usePageContext()
+    const { urlParsed } = usePageContext()
 
     const dispatch = useAppDispatch()
     const tabOpen = useAppSelector((state) => state.filterSection.value)
     const [filterAllowed, setFilterAllowed] = useState(true)
 
     const { filters } = useData<Data>()
+    console.log(filters)
 
-    const tabs = ["Volumes", "Chapters", "Pages"]
+    const tabs = ["volumes", "chapters", "pages"]
 
+    const fieldsPerTab = {
+        volumes: ["bunkoban", "saga"],
+        chapters: ["arc", "duel", "characters"],
+        pages: ["pageFilter"]
+    }
+
+    const characterList = filters.groups.flatMap(group => group["characters"].map(({ short }) => short))
+    const pageFilterNames = filters.page.flatMap(item => item)
+
+    let schema = yup.object({
+        bunkoban: yup.boolean().default(false).required(),
+        saga: yup.string().oneOf(filters.saga).nullable().defined().default(null)
+        .when([], {
+            is: () => tabOpen == "volumes",
+            then: schema => schema.required(),
+            otherwise: schema => schema.notRequired(),
+        }),
+        arc: yup.array().of(yup.number().max(filters.arc.length).defined()).nullable().defined().default(null),
+        duel: yup.array().of(yup.string().oneOf(filters.duel).defined()).nullable().defined().default(null),
+        characters: yup.array().of(yup.string().oneOf(characterList).defined()).nullable().defined().default(null),
+        page_filter: yup.string().oneOf(pageFilterNames.flatMap(item => item["query"])).nullable().defined().default(null)
+        .when([], {
+            is: () => tabOpen == "pages",
+            then: val => val.required(),
+            otherwise: val => val.notRequired(),
+        })
+    }).test(
+        "at-least-one",
+        "At least one chapter field is required",
+        value => (tabOpen == "chapters" && !!(value?.arc || value?.duel || value?.characters))
+    )
 
     const {
         register,
@@ -43,101 +83,71 @@ export default function Page() {
         setValue,
         getValues
     } = useForm<FormType>({
-        defaultValues: {
-            bunkoban: false,
-            saga: "",
-            arc: [],
-            duel: [],
-            characters: [],
-            pageFilters: []
-        }
+        resolver: yupResolver(schema),
     })
-    useEffect(() => {
-        setAllowed(tabOpen)
-    }, [watch("arc"), watch("duel"), watch("characters"), watch("pageFilters")])
-
-    useEffect(() => {
-        setAllowed(tabOpen)
-    }, [tabOpen])
-    
-    const setAllowed = (tab: string) => {
-        let allowed = true
-        if (tab == "Volumes") {
-            allowed = getValues().saga != null
-            setFilterAllowed(allowed)
-        } else if (tab == "Chapters") {
-            allowed = getValues().arc.length > 0 || getValues().duel.length > 0 || getValues().characters.length > 0
-            setFilterAllowed(allowed)
-        } else if (tab == "Pages") {
-            allowed = getValues().pageFilters.length > 0
-            setFilterAllowed(allowed)
-        }
-        
-    }
-
 
     return (
         <>
-        <div className="md:flex justify-center">
-        <div className="lg:basis-1/2">
-       
-            <div className="tabs tabs-lift mt-10 flex px-5 mb-10 text-white">
-                {tabs.map((tab) => {
-                    return (
-                        <div
-                            key={tab}
-                            className="basis-1/3">
-                            <div
-                                onClick={() => {
-                                    dispatch(swapFilterSection(tab))
-                                }}
-                                className={`${tabOpen == tab ? "border-x border-t" : "border-b"}
+            <div className="md:flex justify-center">
+                <div className="lg:basis-1/2">
+
+                    <div className="tabs tabs-lift mt-10 flex px-5 mb-10 text-white">
+                        {tabs.map((tab) => {
+                            return (
+                                <div
+                                    key={tab}
+                                    className="basis-1/3">
+                                    <div
+                                        onClick={() => {
+                                            dispatch(swapFilterSection(tab))
+                                        }}
+                                        className={`${tabOpen == tab ? "border-x border-t" : "border-b"}
                             cursor-pointer py-5 border-dotted border-link flex justify-center rounded-t-md`}>
-                                {tab}
+                                        {tab[0].toUpperCase() + tab.slice(1)}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        <div
+                            className="border-x border-b w-full rounded-b-md border-dotted border-link">
+                            <FilterButton filterAllowed={filterAllowed} getValues={getValues} />
+
+                            <div className={`${tabOpen == tabs[2] ? "max-h-1000" : "max-h-0"} overflow-hidden`}>
+                                <FilterWrapper name="Page type">
+                                    <PageSelect options={pageFilterNames} setValue={setValue} watch={watch} register={register} />
+                                </FilterWrapper>
+                            </div>
+
+                            <FilterWrapper name="Edition">
+                                <EditionSelect setValue={setValue} watch={watch} />
+                            </FilterWrapper>
+
+                            <FilterWrapper last={tabOpen == tabs[0]} name="Saga">
+                                <SagaSelect register={register} setValue={setValue} sagas={filters.saga} watch={watch} />
+                            </FilterWrapper>
+
+                            <div className={`${tabOpen != tabs[0] ? "max-h-2000" : "max-h-0"} overflow-hidden`}>
+                                <FilterWrapper name="Duel">
+                                    <DuelSelect duels={filters.duel} originalSetValue={setValue} watchDuels={watch("duel")} />
+                                </FilterWrapper>
+
+                                <FilterWrapper name="Arc">
+                                    <ArcSelect arcs={filters.arc} setValue={setValue} watch={watch} />
+                                </FilterWrapper>
+
+                                <FilterWrapper last name="Characters">
+                                    <CharacterSelect groups={filters.groups} setValue={setValue} />
+                                </FilterWrapper>
                             </div>
                         </div>
-                    )
-                })}
-                <div 
-                className="border-x border-b w-full rounded-b-md border-dotted border-link">
-                    <FilterButton filterAllowed={filterAllowed} getValues={getValues} />
-
-                    <div className={`${tabOpen == tabs[2] ? "max-h-1000" : "max-h-0"} overflow-hidden`}>
-                        <FilterSection name="Page type">
-                            <PageSelect filters={filters.page} setValue={setValue} bunkoban={watch("bunkoban")} />
-                        </FilterSection>
-                    </div>
-
-                    <FilterSection name="Edition">
-                        <EditionSelect setValue={setValue} watch={watch} />
-                    </FilterSection>
-
-                    <FilterSection last={tabOpen == tabs[0]} name="Saga">
-                        <SagaSelect register={register} setValue={setValue} sagas={filters.saga} watch={watch} />
-                    </FilterSection>
-
-                    <div className={`${tabOpen != tabs[0] ? "max-h-2000" : "max-h-0"} overflow-hidden`}>
-                        <FilterSection name="Duel">
-                            <DuelSelect duels={filters.duel} originalSetValue={setValue} watchDuels={watch("duel")} />
-                        </FilterSection>
-
-                        <FilterSection name="Arc">
-                            <ArcSelect arcs={filters.arc} setValue={setValue} watch={watch} />
-                        </FilterSection>
-
-                        <FilterSection last name="Characters">
-                            <CharacterSelect groups={filters.groups} setValue={setValue} />
-                        </FilterSection>
                     </div>
                 </div>
             </div>
-             </div>
-             </div>
         </>
     )
 }
 
-const FilterSection = ({ children, name, last }: { children: React.ReactNode, name: string, last?: boolean }) => {
+const FilterWrapper = ({ children, name, last }: { children: React.ReactNode, name: string, last?: boolean }) => {
     const tabOpen = useAppSelector((state) => state.filterSection.value)
     const [openSection, setOpenSection] = useState<string[]>(["Edition", "Saga"])
 

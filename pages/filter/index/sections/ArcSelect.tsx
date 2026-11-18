@@ -1,7 +1,7 @@
 import type { Arc } from "../+data";
 import { useState, useEffect } from "react";
 
-const ArcSelect = ({ arcs, setValue, watch }: { arcs: Arc[], setValue: Function, watch: Function }) => {
+const ArcSelect = ({ arcs, setValue }: { arcs: Arc[], setValue: Function}) => {
 
     const [selectedArcs, setSelectedArcs] = useState<string[]>([])
 

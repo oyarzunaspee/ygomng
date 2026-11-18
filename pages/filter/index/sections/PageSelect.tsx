@@ -2,39 +2,35 @@ import { useState, useEffect } from "react";
 import type { PageFilters } from "../+data";
 import WarningMessage from "../../../../components/Warning";
 
-const PageSelect = ({ filters, setValue, bunkoban }: { filters: PageFilters[], setValue: Function, bunkoban: boolean }) => {
+const PageSelect = ({ options, setValue, watch, register }: { options: PageFilters[], setValue: Function, watch: Function, register: Function }) => {
+    const bunkoban = watch("bunkoban")
+    const pageFilterValue = watch("page_filter")
 
     const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
+    const returnConditionals = (query: string) => {
+        const bunkobanConditional = bunkoban && ["extra_illust", "game"].includes(query)
+        const originalConditional = !bunkoban && query == "tarot"
+        return { bunkobanConditional, originalConditional }
+    }
+
 
     useEffect(() => {
-        setValue("pageFilters", selectedFilters)
-    }, [selectedFilters])
+        const { bunkobanConditional, originalConditional } = returnConditionals(pageFilterValue)
 
-
-    useEffect(() => {
-        // remove queries depending on if they are allowed in each edition
-        let queries;
-        if (bunkoban) {
-            queries = ["extra_illust", "game"]
-        } else {
-            queries = ["tarot"]
+        if (bunkobanConditional || originalConditional) {
+            setValue("page_filter", null, {
+                shouldValidate: true,
+                shouldDirty: true,
+            })
         }
-        setSelectedFilters(prev =>
-            prev.filter(item => !queries.includes(item))
-        )
-
-
     }, [bunkoban])
 
+
     const checkAvailability = (query: string) => {
-        if (bunkoban && (query == "extra_illust" || query == "game")) {
-            return true
-        } else if (!bunkoban && query == "tarot") {
-            return true
-        } else {
-            return false
-        }
+        const { bunkobanConditional, originalConditional } = returnConditionals(query)
+
+        return bunkobanConditional || originalConditional ? true : false
     }
 
     const addWarning = (query: string) => {
@@ -45,33 +41,36 @@ const PageSelect = ({ filters, setValue, bunkoban }: { filters: PageFilters[], s
     return (
         <>
 
-            {filters.map((filter) => {
+            {options.map((option) => {
                 return (
-                    <div key={`filter-${filter.query}`} 
-                    className={`border-transparent ${addWarning(filter.query) ? "" : "border-b hover:border-link border-dotted"} py-1`}>
+                    <div key={`filter-${option.query}`}
+                        onClick={() => {
+                            if (!checkAvailability(option.query)) {
+                                setValue("page_filter", option.query)
+                            }
+                        }}
+                        className={`border-transparent py-3
+                        ${checkAvailability(option.query) ? "" : "cursor-pointer"}
+                        
+                        ${addWarning(option.query) ? "" : "border-b hover:border-link border-dotted"} 
+                        `}>
                         <div className="flex justify-between items-center">
-                            <span className={`${checkAvailability(filter.query) ? "opacity-50" : ""}
+                            <span className={`${checkAvailability(option.query) ? "opacity-50" : ""}
                          cursor-default`}>
-                                {addWarning(filter.query) &&
+                                {addWarning(option.query) &&
                                     <span className="mr-1 text-warning">
                                         !
                                     </span>
                                 }
-                                {filter.name}
+                                {option.name}
                             </span>
                             <input
-                                onChange={() => {
-                                    setSelectedFilters(prev => {
-                                        if (prev.includes(filter.query)) {
-                                            return prev.filter(a => a !== filter.query)
-                                        } else {
-                                            return [...prev, filter.query]
-                                        }
-                                    })
-                                }}
-                                checked={selectedFilters.includes(filter.query)}
-                                disabled={checkAvailability(filter.query)}
-                                type="checkbox" className="checkbox border-link" />
+                                {...register("page_filter")}
+                                value={option.query}
+                                checked={pageFilterValue === option.query}
+                                disabled={checkAvailability(option.query)}
+                                type="radio" className="radio  text-link"
+                            />
                         </div>
                     </div>
 

@@ -4,7 +4,7 @@ interface FilterSectionState {
   value: string;
 }
 
-const initialState = { value: "Volumes" } satisfies FilterSectionState as FilterSectionState
+const initialState = { value: "volumes" } satisfies FilterSectionState as FilterSectionState
 
 const filterSectionSlice = createSlice({
   name: "filterSection",

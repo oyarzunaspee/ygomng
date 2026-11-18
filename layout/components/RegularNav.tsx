@@ -45,7 +45,7 @@ const RegularNav = () => {
                                 `}>
                                 <div className="flex justify-around">
 
-                                    <button className="flex cursor-pointer flex-col items-center">
+                                    <button className="cursor-pointer">
                                         <tab.Icon className="size-[1.2em] mb-1" />
                                         <span className="text-sm">
                                             {tab.name}

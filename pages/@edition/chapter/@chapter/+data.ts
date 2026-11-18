@@ -17,7 +17,8 @@ async function data(pageContext: customPageContext) {
   let chapterRes: ChapterResponse
 
   if (response.status === 401) throw render(401);
-    if (!response.ok) throw render(500);
+    if (!response.ok) {
+      throw render(500);}
   
     try {
       chapterRes = await response.json() as ChapterResponse;
@@ -25,9 +26,8 @@ async function data(pageContext: customPageContext) {
       // vercel authentication
       if (err instanceof SyntaxError) {
         throw render(401);
-      }
-  
-      throw err;
+      }  
+      throw render(500)
     }
 
     return { pages: chapterRes.pages as PageData[], maxNext: chapterRes.next_limit}

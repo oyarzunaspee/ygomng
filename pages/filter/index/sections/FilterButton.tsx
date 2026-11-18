@@ -45,7 +45,7 @@ const FilterButton = ({ filterAllowed, getValues }: { filterAllowed: boolean, ge
         const url = `${urlParsed.pathnameOriginal}/${tab.toLowerCase()}?${queries.slice(0, -1)}`
 
 
-        window.open(url, "_blank", "noreferrer")
+        // window.open(url, "_blank", "noreferrer")
     }
 
     return (
