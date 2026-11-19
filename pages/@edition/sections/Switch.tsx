@@ -8,12 +8,13 @@ const Switch = ({
   bunkoban,
   loading }: { 
     listing: boolean, 
-    setListing: Function, 
+    setListing: React.Dispatch<React.SetStateAction<boolean>>, 
     bunkoban: boolean,
     loading: boolean
   }) => {
 
     const [editionClicked, setEditionClicked] = useState("")
+    const editionOptions = ["Original", "Bunkoban"]
 
     useEffect(() => {
       if (!loading) {
@@ -25,10 +26,10 @@ const Switch = ({
     <>
       <div className="flex justify-between items-center mt-10 text-link px-10">
         <div className="flex">
-          {["Original", "Bunkoban"].map((edition: string) => {
+          {editionOptions.map((edition: string) => {
             return (
 
-              <label key={edition} htmlFor={edition}
+              <label key={`switch-edition-${edition}`} htmlFor={edition}
                 onClick={() => {
                   setEditionClicked(edition)
                   navigate(`/${edition.toLowerCase()}`)
@@ -39,11 +40,11 @@ const Switch = ({
                   :
                   <input type="radio" name={edition}
                     className="radio-md radio mr-2"
-                    checked={edition == "Original" && !bunkoban ? true : (edition == "Bunkoban" && bunkoban ? true : false)}
+                    checked={edition === "Original" && !bunkoban ? true : (edition == "Bunkoban" && bunkoban ? true : false)}
                   />
                 }
                 <span
-                  className={edition == "Original" && bunkoban ? "opacity-50" : (edition == "Bunkoban" && !bunkoban ? "opacity-50" : "")}
+                  className={edition === "Original" && bunkoban ? "opacity-50" : (edition == "Bunkoban" && !bunkoban ? "opacity-50" : "")}
                 >
                   {edition}
 

@@ -1,13 +1,13 @@
 import { useData } from "vike-react/useData";
 import type { Data } from "./+data";
-import { useScrollFade } from "../../../hooks/scrollFade";
+import { useScrollVisibility } from "../../../hooks/scrollFade";
 import { useOutsideClick } from "../../../hooks/outsideClick";
 import { useState, useEffect } from "react";
 
 export default function Page() {
 
     const { book } = useData<Data>()
-    const scroll = useScrollFade()
+    const scroll = useScrollVisibility()
 
     const [fadeByClick, setFadeByClick] = useState(false)
 

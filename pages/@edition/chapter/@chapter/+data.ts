@@ -1,18 +1,17 @@
-export { data };
-export type Data = Awaited<ReturnType<typeof data>>
-
-
-import type { PageContext } from "vike/types";
-import type { customPageContext } from "../../../+onCreatePageContext";
 import { render } from "vike/abort";
 
+export { data };
+export type Data = Awaited<ReturnType<typeof data>>
+import type { customPageContext } from "../../../+onCreatePageContext";
 import type { PageData, ChapterResponse } from "../../types";
+
+
 
 async function data(pageContext: customPageContext) {
 
   const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/manga/${pageContext.routeParams.chapter}/pages?bunkoban=${pageContext.bunkoban}`
 
-  const response = await fetch(dataUrl, pageContext.cookieHeader)
+  const response = await fetch(dataUrl)
 
   let chapterRes: ChapterResponse
 

@@ -1,14 +1,12 @@
-export { createStore };
-
+// external libraries
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { PageContext } from "vike/types";
-
+import type { PageContext } from "vike/types";
+// redux
 import jumpToChapterSlice from "./slices/jumpToChapter";
 import pageMenuSlice from "./slices/pageMenu";
 import maxNextChapterSlice from "./slices/maxNextChapter";
-import filterSectionSlice from "./slices/filterSection";
-import screenAdjustPageSlice from "./slices/screenAdjustPage";
-
+import filterTabNavSlice from "./slices/filterTabNav";
+import isScreenAdjustedSlice from "./slices/isScreenAdjusted";
 import { authApi } from "./api/authApi";
 import { mangaApi } from "./api/mangaApi";
 
@@ -18,8 +16,8 @@ const reducer = combineReducers({
     pageMenu: pageMenuSlice,
     jumpToChapter: jumpToChapterSlice,
     maxNextChapter: maxNextChapterSlice,
-    filterSection: filterSectionSlice,
-    screenAdjustPage: screenAdjustPageSlice
+    filterTabNav: filterTabNavSlice,
+    isScreenAdjusted: isScreenAdjustedSlice
 })
 
 
@@ -37,3 +35,5 @@ const createStore = (pageContext: PageContext) => {
       }).concat(authApi.middleware, mangaApi.middleware),
   })
 }
+
+export { createStore };

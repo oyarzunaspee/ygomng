@@ -1,8 +1,8 @@
 export { data };
-export type Data = Awaited<ReturnType<typeof data>>
-
-import type { customPageContext } from "../+onCreatePageContext";
 import { render } from "vike/abort";
+
+export type Data = Awaited<ReturnType<typeof data>>
+import type { customPageContext } from "../+onCreatePageContext";
 import type { VolumeData, VolumeResponse } from "./types";
 
 

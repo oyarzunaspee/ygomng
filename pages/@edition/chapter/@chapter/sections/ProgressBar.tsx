@@ -27,7 +27,7 @@ const ProgressBar = () => {
             <div
                 ref={ref}
                 className={`z-80
-                ${progress == 100 ? "" : "rounded-r"}
+                ${progress === 100 ? "" : "rounded-r"}
                 bg-linear-to-r from-fromgrad to-tograd h-3 fixed top-0 left-0
                 transition-width duration-100 ease-in-out
                 `}

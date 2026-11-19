@@ -1,20 +1,17 @@
+// external librarise
 import { usePageContext } from "vike-react/usePageContext";
-import type { customPageContext } from "../pages/+onCreatePageContext";
-import type { VolumeData } from "../pages/@edition/types";
 import { navigate } from "vike/client/router";
+// types
+import type { VolumeData } from "../pages/@edition/types";
+import type { customPageContext } from "../pages/+onCreatePageContext";
 
-const List = ({
-    volumes,
-    loading,
-    clickedChapter,
-    setClickedChapter
-}: {
-    volumes: VolumeData[],
+type ListProps = {
     loading: boolean,
     clickedChapter: number,
-    setClickedChapter: Function
-}) => {
+    setClickedChapter: React.Dispatch<React.SetStateAction<number>>
+}
 
+const List = ({ volumes, props}: { volumes: VolumeData[], props: ListProps }) => {
 
     return (
         <>
@@ -22,13 +19,9 @@ const List = ({
                 {volumes.map((vol) => {
                     return (
                         <ListItem
-                            key={`list-${vol.counter}`}
-                            counter={vol.counter}
-                            title={vol.title}
-                            chapters={vol.chapters}
-                            loading={loading}
-                            clickedChapter={clickedChapter}
-                            setClickedChapter={setClickedChapter}
+                            key={`volume-list-${vol.counter}`}
+                            volume={vol}
+                            props={props}
                         />
                     )
                 })}
@@ -37,48 +30,34 @@ const List = ({
     )
 }
 
-const ListItem = ({
-    counter,
-    title,
-    chapters,
-    loading,
-    clickedChapter,
-    setClickedChapter
-}: Partial<VolumeData> & {
-    loading: boolean,
-    clickedChapter: number,
-    setClickedChapter: Function
-}) => {
+const ListItem = ({ volume, props }: {volume: VolumeData, props: ListProps }) => {
     const { urlParsed, bunkoban } = usePageContext() as customPageContext
 
     return (
         <div tabIndex={0} className="collapse collapse-arrow text-white cursor-pointer">
             <div className="collapse-title font-semibold">
-                Volume {counter}
+                Volume {volume.counter}
                 <span className="opacity-75">
-                    {!bunkoban && `: ${title}`}
+                    {!bunkoban && `: ${volume.title}`}
                 </span>
             </div>
             <div className="collapse-content text-sm">
                 <ul>
-                    {chapters?.map((chap) => {
+                    {volume.chapters?.map((chap) => {
+                        const chapterUrl = `${urlParsed.pathnameOriginal}/chapter/${chap.number}`
                         return (
                             <li
                                 onClick={() => {
-                                    setClickedChapter(chap.number)
-                                    navigate(`${urlParsed.pathnameOriginal}/chapter/${chap.number}`)
+                                    props.setClickedChapter(chap.number)
+                                    navigate(chapterUrl)
                                 }}
-                                key={chap.number}
+                                key={`chapter-list-${chap.number}`}
                                 className="cursor-pointer py-3 px-10 flex justify-between text-[15px] hover:link hover:text-link not-last:border-b border-dotted border-link">
                                 <span className="hover:text-link">
                                     {chap.number}.
-                                    {bunkoban ?
-                                        " " + chap.jpn
-                                        :
-                                        " " + chap.title
-                                    }
+                                    {` ${bunkoban ? chap.jpn : chap.title}`}
                                 </span>
-                                {loading && clickedChapter == chap.number &&
+                                {props.loading && props.clickedChapter === chap.number &&
                                     <span className="loading loading-spinner loading-xs"></span>
                                 }
                             </li>

@@ -1,4 +1,7 @@
-import { useAppSelector, useAppDispatch } from "../../../../../store/hooks";
+// external libraries
+import { useEffect } from "react";
+import { navigate } from "vike/client/router";
+import { usePageContext } from "vike-react/usePageContext";
 import {
     HomeIcon,
     BarsArrowUpIcon,
@@ -6,14 +9,15 @@ import {
     SparklesIcon,
     ArrowPathIcon
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-import { navigate } from "vike/client/router";
-import { usePageContext } from "vike-react/usePageContext";
+// redux
+import { useAppSelector, useAppDispatch } from "../../../../../store/hooks";
 import { toggleCompare, closeScreen } from "../../../../../store/slices/pageMenu";
 import { toggleJumpTo } from "../../../../../store/slices/jumpToChapter";
+// types
 import type { customPageContext } from "../../../../+onCreatePageContext";
+// internal hooks
 import { useMediaQuery } from "../../../../../hooks/mediaQuery";
-
+// components
 import JumpTo from "./JumpTo";
 
 
@@ -21,13 +25,11 @@ const NavMenu = () => {
     const dispatch = useAppDispatch()
 
     const openMenu = useAppSelector((state) => state.pageMenu.value.open)
-    const openJumpTo = useAppSelector((state) => state.jumpToChapter.value)
     const isFetching = useAppSelector((state) => state.pageMenu.value.isFetching)
     const isLG = useMediaQuery();
 
-
-
     const { urlParsed, bunkoban } = usePageContext() as customPageContext
+
     const menu = [
         {
             name: "Home",
@@ -96,13 +98,13 @@ const NavMenu = () => {
                                 return (
                                     <div
                                         onClick={option.onClick}
-                                        key={i} 
+                                        key={`chapter-nav-${i}`} 
                                         className="flex px-5 rounded-lg cursor-pointer py-2 justify-between hover:bg-yamier hover:text-link">
                                         <span className="text-[18px]">
                                             {option.name}
                                         </span>
                                         <option.Icon className={`
-                                ${isFetching && option.tag == "compare" ? "animate-spin" : ""}    
+                                ${isFetching && option.tag === "compare" ? "animate-spin" : ""}    
                                 size-6`} />
                                     </div>
                                 )

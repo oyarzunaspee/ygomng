@@ -1,14 +1,17 @@
+// external libraries
 import { usePageContext } from "vike-react/usePageContext";
-
+import { useData } from "vike-react/useData";
+import { useState, useEffect } from "react";
+// internal hooks
+import { getLoading, subscribe } from "../../hooks/loadingState";
+// types
+import type { customPageContext } from "../+onCreatePageContext";
+import type { Data } from "./+data";
+// components
 import List from "../../components/List";
 import Card from "../../components/Card";
 import Switch from "./sections/Switch";
-import { useData } from "vike-react/useData";
-import type { Data } from "./+data";
-import { getLoading, subscribe } from "../../hooks/loadingState";
-import { useState, useEffect } from "react";
 
-import type { customPageContext } from "../+onCreatePageContext";
 
 
 export default function Page() {
@@ -32,6 +35,12 @@ export default function Page() {
 
   const { volumes } = useData<Data>()
 
+  const props = {
+    loading: loading,
+    clickedChapter: clickedChapter,
+    setClickedChapter: setClickedChapter
+  }
+
 
   return (
     <div className="md:flex justify-center">
@@ -47,16 +56,12 @@ export default function Page() {
           {listing ?
             <List
               volumes={volumes}
-              loading={loading}
-              clickedChapter={clickedChapter}
-              setClickedChapter={setClickedChapter}
+              props={props}
             />
             :
             <Card
               volumes={volumes}
-              loading={loading}
-              clickedChapter={clickedChapter}
-              setClickedChapter={setClickedChapter}
+              props={props}
             />
           }
         </div>

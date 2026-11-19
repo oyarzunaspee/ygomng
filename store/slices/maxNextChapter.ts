@@ -4,7 +4,7 @@ interface MaxNextChapterState {
   value: number;
 }
 
-const initialState = { value: 0 } satisfies MaxNextChapterState as MaxNextChapterState
+const initialState: MaxNextChapterState = { value: 0 }
 
 const maxNextChapterStateSlice = createSlice({
   name: "maxNextChapter",

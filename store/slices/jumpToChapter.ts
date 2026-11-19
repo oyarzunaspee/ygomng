@@ -4,7 +4,7 @@ interface JumpToChapterState {
   value: boolean;
 }
 
-const initialState = { value: false } satisfies JumpToChapterState as JumpToChapterState
+const initialState: JumpToChapterState = { value: false }
 
 const jumpToChapterStateSlice = createSlice({
   name: "jumpToChapter",

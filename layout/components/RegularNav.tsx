@@ -1,36 +1,42 @@
+// external libraries
 import { usePageContext } from "vike-react/usePageContext";
-import type { customPageContext } from "../../pages/+onCreatePageContext";
 import {
     BookOpenIcon,
     HomeIcon,
     MagnifyingGlassCircleIcon
 } from "@heroicons/react/24/outline";
-import { useScrollFade } from "../../hooks/scrollFade";
+// internal hooks
+import { useScrollVisibility } from "../../hooks/scrollFade";
+// types
+import type { customPageContext } from "../../pages/+onCreatePageContext";
 
 const RegularNav = () => {
-    const { urlParsed, routeParams, fullView, bunkoban } = usePageContext() as customPageContext
+    const { urlParsed, fullView, bunkoban } = usePageContext() as customPageContext
 
 
     const tabs = [
         {
-            "name": "Books",
-            "Icon": BookOpenIcon,
-            "link": "/books"
+            name: "Books",
+            Icon: BookOpenIcon,
+            link: "/books",
+            disabled: true
         },
         {
-            "name": "Manga",
-            "Icon": HomeIcon,
-            "link": `/${bunkoban ? "bunkoban" : "original"}`
+            name: "Manga",
+            Icon: HomeIcon,
+            link: `/${bunkoban ? "bunkoban" : "original"}`,
+            disabled: false
         },
         {
-            "name": "Filter",
-            "Icon": MagnifyingGlassCircleIcon,
-            "link": "/filter"
+            name: "Filter",
+            Icon: MagnifyingGlassCircleIcon,
+            link: "/filter",
+            disabled: true
         }
     ]
-    const scroll = useScrollFade()
+    const scroll = useScrollVisibility()
     return (
-        <div className="flex fixed bottom-0 md:bottom-5 w-full justify-center">
+        <nav aria-label="Main navigation" className="flex fixed bottom-0 md:bottom-5 w-full justify-center">
             <div className={`z-10 md:basis-1/2 lg:basis-1/3 w-full md:border md:border-dashed md:border-link bg-yamier text-neutral-content py-5 md:rounded-lg
         ${fullView && (scroll ? "opacity-100" : "opacity-0")}
         transition-opacity ease-in-out duration-500`}>
@@ -38,15 +44,15 @@ const RegularNav = () => {
                     {tabs.map((tab) => {
                         return (
                             <a
-                                key={tab.name}
-                                href={tab.name == "Manga" ? tab.link : ""}
+                                key={`nav-${tab.name}`}
+                                href={tab.disabled ? "" : tab.link}
                                 className={`basis-1/3
-                                ${tab.name == "Manga" ? "" : "pointer-events-none"}
+                                ${tab.disabled ? "pointer-events-none" : ""}
                                 ${urlParsed.pathnameOriginal.startsWith(tab.link) ? "text-link" : ""}
                                 `}>
                                 <div className="flex justify-around">
 
-                                    <button className={`flex ${tab.name == "Manga" ? "cursor-pointer" : "opacity-50"} flex-col items-center`}>
+                                    <button className={`flex ${tab.disabled ? "opacity-50" : "cursor-pointer"} flex-col items-center`}>
                                         <tab.Icon className="size-[1.2em] mb-1" />
                                         <span className="text-sm">
                                             {tab.name}
@@ -58,7 +64,7 @@ const RegularNav = () => {
                     })}
                 </div>
             </div>
-        </div>
+        </nav>
 
     )
 }

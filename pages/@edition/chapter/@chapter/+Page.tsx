@@ -1,32 +1,34 @@
-import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
+// external libraries
 import { usePageContext } from "vike-react/usePageContext";
 import { useEffect, useState, useRef } from "react";
-
-import type { ComparisonResponse, PageData } from "./types";
-import { useLazyGetComparePagesQuery } from "../../../../store/api/mangaApi";
 import {
     closeCompare,
     updateFetching,
     closeScreen
 } from "../../../../store/slices/pageMenu";
+import { useData } from "vike-react/useData";
+// redux
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
+import { useLazyGetComparePagesQuery } from "../../../../store/api/mangaApi";
 import { setLastChapter } from "../../../../store/slices/maxNextChapter";
-import { ImgComparisonSlider } from '@img-comparison-slider/react';
-import { getLoading, subscribe } from "../../../../hooks/loadingState";
 import { toggleJumpTo } from "../../../../store/slices/jumpToChapter";
-import type { customPageContext } from "../../../+onCreatePageContext";
+// internal hooks
+import { getLoading, subscribe } from "../../../../hooks/loadingState";
 import { useMediaQuery } from "../../../../hooks/mediaQuery";
-
+// custom
 import {
     Comparison,
     ComparisonHandle,
     ComparisonItem,
 } from "../../../../components/shadcn/components/ui/comparison";
-
+// types
+import type { customPageContext } from "../../../+onCreatePageContext";
+import type { ComparisonResponse, PageData } from "./types";
+// components
 import ScalePage from "./sections/ScalePage";
 import NavMenu from "./sections/NavMenu";
 import ProgressBar from "./sections/ProgressBar";
 
-import { useData } from "vike-react/useData";
 import type { Data } from "./+data";
 
 
@@ -51,9 +53,9 @@ export default function Page() {
     const { pages, maxNext } = useData<Data>()
 
     const comparePages = useAppSelector((state) => state.pageMenu.value.compare)
-    const screenAdjustPage = useAppSelector((state) => state.screenAdjustPage.value)
+    const screenAdjustPage = useAppSelector((state) => state.isScreenAdjusted.value)
 
-    const [comparePagesList, setComparePagesList] = useState<ComparisonResponse | null>()
+    const [comparePagesList, setComparePagesList] = useState<ComparisonResponse | null>(null)
 
     const { bunkoban, currentChapter } = usePageContext() as customPageContext
 
@@ -86,7 +88,7 @@ export default function Page() {
     useEffect(() => {
         dispatch(closeScreen())
         setComparePagesList(result.data)
-    }, [result.isSuccess])
+    }, [result.data])
 
 
 
@@ -113,7 +115,7 @@ export default function Page() {
                         return (
                             <div
                                 onClick={(e) => handleClickDoublePage(e, page.double)}
-                                key={`list-${page.number}`}
+                                key={`page-list-${page.number}`}
                                 style={{ order: order }}
                                 className={`
                                 ${page.double ? "cursor-pointer" : ""}
@@ -136,7 +138,7 @@ export default function Page() {
                         return (
                             <>
 
-                                <PageComparison key={`viewer-${page.number}`} page={page} comparePages={comparePagesList.pages} i={j} />
+                                <PageComparison key={`page-viewer-${page.number}`} page={page} comparePages={comparePagesList.pages} i={j} />
 
                             </>
 
@@ -149,18 +151,9 @@ export default function Page() {
 }
 
 const PageComparison = ({ page, comparePages, i }: { page: PageData, comparePages?: Partial<PageData>[], i: number }) => {
-    const first = useRef<HTMLImageElement | null>(null)
-    const second = useRef<HTMLImageElement | null>(null)
-    const isLG = useMediaQuery();
-    const screenAdjustPage = useAppSelector((state) => state.screenAdjustPage.value)
 
-    useEffect(() => {
-        if (first.current && second.current) {
-            const max = Math.max(first.current.height, second.current.height)
-            first.current.style.height = `${max}px`
-            second.current.style.height = `${max}px`
-        }
-    }, [first.current, second.current])
+    const isLG = useMediaQuery();
+    const screenAdjustPage = useAppSelector((state) => state.isScreenAdjusted.value)
 
 
     return (

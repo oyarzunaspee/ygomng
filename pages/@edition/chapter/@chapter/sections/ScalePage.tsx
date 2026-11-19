@@ -1,19 +1,22 @@
-import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
-import { toggleScreenAdjustPage } from "../../../../../store/slices/screenAdjustPage";
+// external libraries
 import { ArrowsPointingInIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
-import { useScrollFade } from "../../../../../hooks/scrollFade";
+// redux
+import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
+import { handleToggle } from "../../../../../store/slices/isScreenAdjusted";
+// internal hooks
+import { useScrollVisibility } from "../../../../../hooks/scrollFade";
 
 const ScalePage = () => {
     const dispatch = useAppDispatch()
 
-    const scroll = useScrollFade()
+    const scroll = useScrollVisibility()
     
-    const screenAdjustPage = useAppSelector((state) => state.screenAdjustPage.value)
+    const isScreenAdjusted = useAppSelector((state) => state.isScreenAdjusted.value)
 
-    let Icon = screenAdjustPage ? ArrowsPointingOutIcon : ArrowsPointingInIcon
+    const Icon = isScreenAdjusted ? ArrowsPointingOutIcon : ArrowsPointingInIcon
 
     const toggleScreenAdjust = () => {
-        dispatch(toggleScreenAdjustPage())
+        dispatch(handleToggle())
     }
 
     return (
@@ -26,7 +29,7 @@ const ScalePage = () => {
                 transition-opacity ease-in-out duration-500`}>
                     <Icon className="size-6 mr-1" />
                     <span className="">
-                        Adjust to {screenAdjustPage ? "default" : "screen"}
+                        Adjust to {isScreenAdjusted ? "default" : "screen"}
                     </span>
                 </button>
             </div>

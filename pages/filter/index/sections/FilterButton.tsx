@@ -7,7 +7,7 @@ import { usePageContext } from "vike-react/usePageContext";
 
 const FilterButton = ({ filterAllowed, getValues }: { filterAllowed: boolean, getValues: Function }) => {
     const { urlParsed } = usePageContext()
-    const tab = useAppSelector((state) => state.filterSection.value)
+    const tab = useAppSelector((state) => state.filterTabNav.value)
     const [warning, setWarning] = useState(false)
 
     useEffect(() => {

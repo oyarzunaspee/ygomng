@@ -1,8 +1,8 @@
-import { useState } from "react";
+// external libraries
 import { usePageContext } from "vike-react/usePageContext";
 import { ArrowUturnLeftIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { navigate } from "vike/client/router";
-
+// components
 import Splash from "../../components/Splash";
 
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
         </h1>
         </>
         }
-        {(abortStatusCode != 401 && !is404) &&
+        {(abortStatusCode !== 401 && !is404) &&
         <>
         <h1 className="text-[25px] my-2">
           Something went wrong
@@ -43,11 +43,9 @@ export default function Page() {
         </span>
         </>
         }
-        {abortStatusCode != 401 && (abortStatusCode != undefined && isErrorPage) &&
+        {abortStatusCode !== 401 && (abortStatusCode != undefined && isErrorPage) &&
         <div 
-        onClick={() => {
-          navigate("/")
-        }}
+        onClick={() => navigate("/")}
         className="flex flex-col mt-5 p-5 items-center cursor-pointer hover:text-link">
           <ArrowUturnLeftIcon className="size-6" />
           <small>
@@ -55,9 +53,9 @@ export default function Page() {
           </small>
         </div>
         }
-        {abortStatusCode == undefined &&
+        {abortStatusCode === undefined &&
 
-        <a href="https://kbsta.straw.page" target="_blank" className="mt-5 underline-offset-5 underline text-link">
+        <a href="https://kbsta.straw.page" rel="noopener noreferrer" className="mt-5 underline-offset-5 underline text-link">
           <span>
           shoot me a message
           </span>

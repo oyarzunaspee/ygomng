@@ -1,8 +1,14 @@
+// external libraries
 import { useData } from "vike-react/useData";
-import type { Data } from "./+data";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { usePageContext } from "vike-react/usePageContext";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler, Control, useWatch } from "react-hook-form"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+// redux
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { changeFilterTab } from "../../../store/slices/filterTabNav";
+import type { Tabs } from "../../../store/slices/filterTabNav";
+// components
 import EditionSelect from "./sections/EditionSelect";
 import SagaSelect from "./sections/SagaSelect";
 import ArcSelect from "./sections/ArcSelect";
@@ -10,11 +16,8 @@ import DuelSelect from "./sections/DuelSelect";
 import CharacterSelect from "./sections/CharacterSelect";
 import PageSelect from "./sections/PageSelect";
 import FilterButton from "./sections/FilterButton";
-import type { CharacterType } from "./+data";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { swapFilterSection } from "../../../store/slices/filterSection";
-import { usePageContext } from "vike-react/usePageContext";
 
+import type { Data } from "./+data";
 
 export type FormType = {
     bunkoban: boolean;
@@ -29,12 +32,12 @@ export default function Page() {
     const {urlParsed} = usePageContext()
 
     const dispatch = useAppDispatch()
-    const tabOpen = useAppSelector((state) => state.filterSection.value)
+    const tabOpen = useAppSelector((state) => state.filterTabNav.value)
     const [filterAllowed, setFilterAllowed] = useState(true)
 
     const { filters } = useData<Data>()
 
-    const tabs = ["Volumes", "Chapters", "Pages"]
+    const tabs = ["volumes", "chapters", "pages"]
 
 
     const {
@@ -62,13 +65,13 @@ export default function Page() {
     
     const setAllowed = (tab: string) => {
         let allowed = true
-        if (tab == "Volumes") {
+        if (tab == "volumes") {
             allowed = getValues().saga != null
             setFilterAllowed(allowed)
-        } else if (tab == "Chapters") {
+        } else if (tab == "chapters") {
             allowed = getValues().arc.length > 0 || getValues().duel.length > 0 || getValues().characters.length > 0
             setFilterAllowed(allowed)
-        } else if (tab == "Pages") {
+        } else if (tab == "pages") {
             allowed = getValues().pageFilters.length > 0
             setFilterAllowed(allowed)
         }
@@ -86,7 +89,7 @@ export default function Page() {
                             className="basis-1/3">
                             <div
                                 onClick={() => {
-                                    dispatch(swapFilterSection(tab))
+                                    dispatch(changeFilterTab(tab as Tabs))
                                 }}
                                 className={`${tabOpen == tab ? "border-x border-t" : "border-b"}
                             cursor-pointer py-5 border-dotted border-link flex justify-center rounded-t-md`}>
@@ -133,15 +136,15 @@ export default function Page() {
 }
 
 const FilterSection = ({ children, name, last }: { children: React.ReactNode, name: string, last?: boolean }) => {
-    const tabOpen = useAppSelector((state) => state.filterSection.value)
+    const tabOpen = useAppSelector((state) => state.filterTabNav.value)
     const [openSection, setOpenSection] = useState<string[]>(["Edition", "Saga"])
 
     useEffect(() => {
-        if (tabOpen == "Volumes") {
+        if (tabOpen == "volumes") {
             setOpenSection(["Edition", "Saga"])
-        } else if (tabOpen == "Chapters") {
+        } else if (tabOpen == "chapters") {
             setOpenSection(["Arc", "Duel", "Characters"])
-        } else if (tabOpen == "Pages") {
+        } else if (tabOpen == "pages") {
             setOpenSection(["Page type"])
         }
     }, [tabOpen])
