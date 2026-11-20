@@ -1,13 +1,7 @@
-import type { Arc } from "../+data";
+import type { Arc } from "../../types";
 import { useState, useEffect } from "react";
 
-const ArcSelect = ({ arcs, setValue }: { arcs: Arc[], setValue: Function}) => {
-
-    const [selectedArcs, setSelectedArcs] = useState<string[]>([])
-
-    useEffect(() => {
-        setValue("arc", selectedArcs)
-    }, [selectedArcs])
+const ArcSelect = ({ arcs, register }: { arcs: Arc[], register: any}) => {
 
 
     return (
@@ -20,15 +14,7 @@ const ArcSelect = ({ arcs, setValue }: { arcs: Arc[], setValue: Function}) => {
                                 {arc.name}
                             </span>
                             <input
-                                onChange={() => {
-                                    setSelectedArcs(prev => {
-                                        if (prev.includes(arc.name)) {
-                                            return prev.filter(a => a !== arc.name)
-                                        } else {
-                                            return [...prev, arc.name]
-                                        }
-                                    })
-                                }}
+                            {...register("arc")}
                                 type="checkbox" className="checkbox border-link" />
                         </div>
 

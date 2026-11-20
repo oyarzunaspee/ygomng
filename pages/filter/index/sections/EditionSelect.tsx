@@ -1,26 +1,23 @@
-const EditionSelect = ({ setValue, watch }: { setValue: Function, watch: Function }) => {
+import type { FormType } from "../../types";
+import type { UseFormRegister } from "react-hook-form";
 
-    const bunkoban = watch("bunkoban")
-
-    const onChangeEdition = (edition: boolean) => {
-        setValue("bunkoban", edition)
-    }
+const EditionSelect = ({ register }: { register: UseFormRegister<FormType> }) => {
 
     return (
         <div className="flex justify-around text-sm">
             <label className="label">
                 <input
-                    onChange={() => onChangeEdition(false)}
+                    {...register("bunkoban")}
                     type="radio"
-                    checked={!bunkoban ? true : false}
+                    value="original"
                     className="radio text-link" />
                 Original
             </label>
             <label className="label">
                 <input
-                    onChange={() => onChangeEdition(true)}
+                    {...register("bunkoban")}
                     type="radio"
-                    checked={bunkoban ? true : false}
+                    value="bunkoban"
                     className="radio text-link" />
                 Bunkoban
             </label>

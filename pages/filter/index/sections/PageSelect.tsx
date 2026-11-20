@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
-import type { PageFilters } from "../+data";
+import type { PageFilters } from "../../types";
 import WarningMessage from "../../../../components/Warning";
+import { useWatch } from "react-hook-form";
 
-const PageSelect = ({ options, setValue, watch, register }: { options: PageFilters[], setValue: Function, watch: Function, register: Function }) => {
-    const bunkoban = watch("bunkoban")
-    const pageFilterValue = watch("page_filter")
+interface Props {
+    options: PageFilters[],
+    setValue: Function,
+    bunkoban: boolean,
+    register: Function
+}
+
+const PageSelect = ({ options, setValue, bunkoban, register }: Props) => {
+
+    const selectedDuelsList = useWatch({
+        control,
+        name: "page_filter",
+        defaultValue: []
+    });
 
     const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 

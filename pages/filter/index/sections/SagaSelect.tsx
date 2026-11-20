@@ -1,45 +1,63 @@
 import { useEffect } from "react";
 import WarningMessage from "../../../../components/Warning";
+import { useWatch } from "react-hook-form";
+import type { FormType } from "../../types";
+import type {
+    Control,
+    UseFormSetValue,
+    UseFormRegister
+} from "react-hook-form";
 
-const SagaSelect = ({ register, setValue, sagas, watch }: { register: any, setValue: Function, sagas: string[], watch: Function }) => {
+interface Props {
+    sagas: string[],
+    register: UseFormRegister<FormType>,
+    setValue: UseFormSetValue<FormType>,
+    control: Control<FormType>
+}
 
-    const bunkoban = watch("bunkoban")
-    const sagaValue = watch("saga")
+const SagaSelect = ({ register, setValue, sagas, control }: Props) => {
+
+    const bunkoban = useWatch({
+        control,
+        name: "bunkoban"
+    });
+
 
     // sagas are only available in original edition
     useEffect(() => {
-        if (sagaValue) {
-            setValue("bunkoban", false)
-        }
-    }, [sagaValue])
-
-    useEffect(() => {
-        if (bunkoban) {
-            setValue("saga", "")
+        if (bunkoban === "bunkoban") {
+            setValue(
+                "saga", "",
+                {
+                    shouldDirty: true,
+                    shouldValidate: true
+                }
+            );
         }
     }, [bunkoban])
 
+
     return (
         <>
-        {bunkoban &&
-        <div className={`mb-1 ${bunkoban ? "opacity-50" : ""}`}>
-            <WarningMessage message="Only available for original edition" />
-        </div>
-        }
-        <select
-            {...register("saga")}
-            disabled={bunkoban}
-            defaultValue=""
-            className="w-full border border-dotted border-link rounded-md select bg-transparent">
-            <option value="">
-                No saga selected
-            </option>
-            {sagas.map((s) => (
-                <option key={s} value={s}>
-                    {s}
+            {bunkoban == "bunkoban" &&
+                <div className={`mb-1 ${bunkoban ? "opacity-50" : ""}`}>
+                    <WarningMessage message="Only available for original edition" />
+                </div>
+            }
+            <select
+                {...register("saga")}
+                disabled={bunkoban == "bunkoban"}
+                defaultValue=""
+                className="w-full border border-dotted border-link rounded-md select bg-transparent">
+                <option value="">
+                    No saga selected
                 </option>
-            ))}
-        </select>
+                {sagas.map((saga) => (
+                    <option key={`saga-select-${saga}`} value={saga}>
+                        {saga}
+                    </option>
+                ))}
+            </select>
         </>
     )
 }

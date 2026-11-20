@@ -1,47 +1,13 @@
 export { data };
 export type Data = Awaited<ReturnType<typeof data>>
-
-import type { customPageContext } from "../../+onCreatePageContext";
 import { render } from "vike/abort";
 
-export type Arc = {
-  name: string;
-  number: number;
-}
+import type { customPageContext } from "../../+onCreatePageContext";
+import type { FilterResponse, FilterType } from "../types";
+import filterData from "../filterData";
 
-export type PageFilters = {
-  query: string;
-  name: string;
-}
-
-export type CharacterType = {
-  short: string;
-  name: string;
-  eng: string | null;
-  alt: string | null;
-}
-
-export type GroupType = {
-  group: (string | number)[];
-  characters: CharacterType[];
-}
-
-type FilterType = {
-  saga: string[];
-  arc: Arc[];
-  duel: string[];
-  groups: GroupType[];
-  page: PageFilters[];
-}
-
-type FilterResponse = {
-  status: number;
-  filters: FilterType;
-}
-
- 
 async function data(pageContext: customPageContext) {
-  
+
   const dataUrl = `${import.meta.env.PUBLIC_ENV__BACKEND_URL}/v1/filter`
 
   let filterRes: FilterResponse
@@ -50,14 +16,18 @@ async function data(pageContext: customPageContext) {
     filterRes = (await response.json()) as FilterResponse
 
     if (response.status == 200) {
-      return {filters: filterRes.filters as FilterType}
+      const fetchedData = filterRes.filters as FilterType
+
+      const FilterData = filterData(fetchedData)
+
+      return { filterData: FilterData }
     } else if (response.status == 401) {
       throw render(401)
     } else {
       throw render(500)
     }
-     
+
   } catch (err: any) {
-      throw render(err._pageContextAbort.abortStatusCode)
+    throw render(err._pageContextAbort.abortStatusCode)
   }
 }
