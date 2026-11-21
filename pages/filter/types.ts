@@ -34,10 +34,10 @@ export type FilterResponse = {
 }
 
 export type FormType = {
-    bunkoban: "bunkoban" | "original";
-    saga: string | null;
-    arc: number[] | null;
-    duel: string[] | null;
-    characters: string[] | null;
-    page_filter: string | null;
+  bunkoban: "bunkoban" | "original";
+  saga: string | null;
+  arc: number[] | null;
+  duel: string[] | null;
+  characters: string[] | null;
+  page_filter: string | null;
 }

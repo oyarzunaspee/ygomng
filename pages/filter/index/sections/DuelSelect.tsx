@@ -5,13 +5,9 @@ import { useWatch } from "react-hook-form";
 // types
 import type { FormType } from "../../types";
 import type { UseFormSetValue, Control } from "react-hook-form";
+import { CommonProps } from "../+Page";
 
-interface SelectedProps {
-    duels: string[] | null
-    setValue: UseFormSetValue<FormType>
-}
-
-const SelectedDuelsList = ({ duels, setValue }: SelectedProps) => {
+const SelectedDuelsList = ({ duels, setValue }: {duels: string[] | null} & Pick<CommonProps, "setValue">) => {
 
     const handleRemoveDuel = (duel: string) => {
         setValue(

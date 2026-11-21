@@ -27,6 +27,14 @@ import FilterWrapper from "./sections/FilterWrapper";
 import type { FormType } from "../types";
 import type { Data } from "./+data";
 
+import { UseFormSetValue, UseFormRegister, UseFormGetValues } from "react-hook-form";
+
+export interface CommonProps {
+    control: Control<FormType>
+    setValue: UseFormSetValue<FormType>
+    register: UseFormRegister<FormType>
+    getValues: UseFormGetValues<FormType>
+}
 
 
 
@@ -67,7 +75,8 @@ export default function Page() {
         watch,
         control,
         setValue,
-        getValues
+        getValues,
+        handleSubmit
     } = useForm<FormType>({
         resolver: yupResolver(schema),
         defaultValues: {
@@ -101,11 +110,18 @@ export default function Page() {
                         })}
                         <div
                             className="border-x border-b w-full rounded-b-md border-dotted border-link">
-                            <FilterButton filterAllowed getValues={getValues} />
+                            <FilterButton filterAllowed getValues={getValues} handleSubmit={handleSubmit} />
 
                             <div className={`${tabOpen === "pages" ? "max-h-1000" : "max-h-0"} overflow-hidden`}>
                                 <FilterWrapper name="Page type">
-                                    {/* <PageSelect options={filterData.pageFilterList} setValue={setValue} bunkoban={watch("bunkoban") == "bunkoban"} register={register} /> */}
+                                    <PageSelect 
+                                        options={filterData.pageFilterList}
+                                        control={control}
+                                        excludedOptions={filterData.editionExcludedPageFilters}
+                                        setValue={setValue} 
+                                        bunkoban={watch("bunkoban") == "bunkoban"} 
+                                        register={register} 
+                                    />
                                 </FilterWrapper>
                             </div>
 

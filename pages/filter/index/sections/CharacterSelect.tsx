@@ -6,22 +6,10 @@ import { useWatch } from "react-hook-form";
 import type { 
     GroupType,
     CharacterType,
-    FormType
 } from "../../types";
-import type {
-    Control,
-    UseFormSetValue,
-    UseFormRegister
-} from "react-hook-form";
+import { CommonProps } from "../+Page";
 
-interface Props {
-    groups: GroupType[]
-    control: Control<FormType>
-    setValue: UseFormSetValue<FormType>
-    register: UseFormRegister<FormType>
-}
-
-const CharacterSelect = ({ groups, control, setValue, register }: Props) => {
+const CharacterSelect = ({ groups, control, setValue, register }: {groups: GroupType[]} & Omit<CommonProps, "getValues">) => {
     const [engNames, setEngNames] = useState(false)
 
     const selectedChars = useWatch({

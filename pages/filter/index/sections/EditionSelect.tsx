@@ -1,7 +1,8 @@
 import type { FormType } from "../../types";
 import type { UseFormRegister } from "react-hook-form";
+import { CommonProps } from "../+Page";
 
-const EditionSelect = ({ register }: { register: UseFormRegister<FormType> }) => {
+const EditionSelect = ({ register }:  Pick<CommonProps, "register"> ) => {
 
     return (
         <div className="flex justify-around text-sm">

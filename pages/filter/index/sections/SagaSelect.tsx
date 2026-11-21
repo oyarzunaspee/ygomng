@@ -1,21 +1,9 @@
 import { useEffect } from "react";
 import WarningMessage from "../../../../components/Warning";
 import { useWatch } from "react-hook-form";
-import type { FormType } from "../../types";
-import type {
-    Control,
-    UseFormSetValue,
-    UseFormRegister
-} from "react-hook-form";
+import { CommonProps } from "../+Page";
 
-interface Props {
-    sagas: string[],
-    register: UseFormRegister<FormType>,
-    setValue: UseFormSetValue<FormType>,
-    control: Control<FormType>
-}
-
-const SagaSelect = ({ register, setValue, sagas, control }: Props) => {
+const SagaSelect = ({ register, setValue, sagas, control }: {sagas: string[]} & Omit<CommonProps, "getValues">) => {
 
     const bunkoban = useWatch({
         control,

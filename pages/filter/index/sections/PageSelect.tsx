@@ -2,33 +2,32 @@ import { useState, useEffect } from "react";
 import type { PageFilters } from "../../types";
 import WarningMessage from "../../../../components/Warning";
 import { useWatch } from "react-hook-form";
+import { CommonProps } from "../+Page";
 
 interface Props {
-    options: PageFilters[],
-    setValue: Function,
-    bunkoban: boolean,
-    register: Function
+    options: PageFilters[]
+    excludedOptions: { bunkoban: string[], original: string[] }
+    bunkoban: boolean
 }
 
-const PageSelect = ({ options, setValue, bunkoban, register }: Props) => {
+const PageSelect = ({ options, excludedOptions, setValue, bunkoban, register, control }: Props & Omit<CommonProps, "getValues">) => {
 
-    const selectedDuelsList = useWatch({
+    const selectedPageFilter = useWatch({
         control,
         name: "page_filter",
-        defaultValue: []
+        defaultValue: null
     });
 
-    const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
     const returnConditionals = (query: string) => {
-        const bunkobanConditional = bunkoban && ["extra_illust", "game"].includes(query)
-        const originalConditional = !bunkoban && query == "tarot"
+        const bunkobanConditional = bunkoban && excludedOptions["bunkoban"].includes(query)
+        const originalConditional = !bunkoban && excludedOptions["original"].includes(query)
         return { bunkobanConditional, originalConditional }
     }
 
 
     useEffect(() => {
-        const { bunkobanConditional, originalConditional } = returnConditionals(pageFilterValue)
+        const { bunkobanConditional, originalConditional } = returnConditionals(selectedPageFilter ?? "")
 
         if (bunkobanConditional || originalConditional) {
             setValue("page_filter", null, {
@@ -49,27 +48,23 @@ const PageSelect = ({ options, setValue, bunkoban, register }: Props) => {
         return (bunkoban && ["extra_illust", "game"].includes(query)) || (!bunkoban && ["tarot"].includes(query)) ? true : false
     }
 
-
     return (
         <>
 
             {options.map((option) => {
+                const isFilterAvailable = checkAvailability(option.query)
+                const warning = addWarning(option.query)
                 return (
-                    <div key={`filter-${option.query}`}
-                        onClick={() => {
-                            if (!checkAvailability(option.query)) {
-                                setValue("page_filter", option.query)
-                            }
-                        }}
+                    <div key={`page-filter-${option.query}`}
                         className={`border-transparent py-3
-                        ${checkAvailability(option.query) ? "" : "cursor-pointer"}
+                        ${isFilterAvailable ? "" : "cursor-pointer"}
                         
-                        ${addWarning(option.query) ? "" : "border-b hover:border-link border-dotted"} 
+                        ${warning ? "" : "border-b hover:border-link border-dotted"} 
                         `}>
                         <div className="flex justify-between items-center">
-                            <span className={`${checkAvailability(option.query) ? "opacity-50" : ""}
+                            <span className={`${isFilterAvailable ? "opacity-50" : ""}
                          cursor-default`}>
-                                {addWarning(option.query) &&
+                                {warning &&
                                     <span className="mr-1 text-warning">
                                         !
                                     </span>
@@ -79,9 +74,8 @@ const PageSelect = ({ options, setValue, bunkoban, register }: Props) => {
                             <input
                                 {...register("page_filter")}
                                 value={option.query}
-                                checked={pageFilterValue === option.query}
-                                disabled={checkAvailability(option.query)}
-                                type="radio" className="radio  text-link"
+                                disabled={isFilterAvailable}
+                                type="radio" className="radio text-link"
                             />
                         </div>
                     </div>
