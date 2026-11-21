@@ -11,12 +11,11 @@ type ChapterParams = VolumeParams & {
     chap_num: number;
 }
 
-const URL = import.meta.env.PUBLIC_ENV__BACKEND_URL
 
 export const mangaApi = createApi({
     reducerPath: "mangaApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: `${URL}/v1/manga`,
+        baseUrl: `${process.env.PUBLIC_ENV__BACKEND_URL}/v1/manga`,
         credentials: "include",
     }),
     endpoints: (builder) => ({
