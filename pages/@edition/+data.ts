@@ -12,6 +12,7 @@ async function data(pageContext: customPageContext) {
   const dataUrl = `${URL}/v1/manga?bunkoban=${pageContext.bunkoban}`;
 
   const response = await fetch(dataUrl);
+  console.log(response)
 
   if (response.status === 401) throw render(401);
   if (!response.ok) throw render(500);
