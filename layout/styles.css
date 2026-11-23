@@ -18,13 +18,13 @@
 
 @layer components {
 
-.logo {
-  -webkit-mask: url("/assets/kaiyami.svg") no-repeat center;
-  mask: url("/assets/kaiyami.svg") no-repeat center;
-  mask-size: contain;
-}
+  .logo {
+    -webkit-mask: url("/assets/kaiyami.svg") no-repeat center;
+    mask: url("/assets/kaiyami.svg") no-repeat center;
+    mask-size: contain;
+  }
 
-.coloured-slider {
+  .coloured-slider {
     --divider-color: var(--color-link);
     --default-handle-color: var(--color-link);
     --divider-width: 4px;
@@ -42,15 +42,19 @@
   }
 
   .tooltip-tail::after {
-  content: "";
-  position: absolute;
-  top: 99%;
-  left: 50%;
-  transform: translateX(-50%);
+    content: "";
+    position: absolute;
+    top: 99%;
+    left: 50%;
+    transform: translateX(-50%);
 
-  border-width: 20px;
-  border-style: solid;
-  border-color: #140824 transparent transparent transparent; 
-}
+    border-width: 20px;
+    border-style: solid;
+    border-color: #140824 transparent transparent transparent;
+  }
+
 }
 
+.radio {
+  @apply text-link;
+}

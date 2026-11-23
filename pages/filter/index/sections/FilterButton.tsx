@@ -1,59 +1,47 @@
-import { useAppSelector } from "../../../../store/hooks";
-import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
-import { useState, useEffect } from "react";
-import WarningMessage from "../../../../components/Warning";
+// external libraries
 import { usePageContext } from "vike-react/usePageContext";
-import { CommonProps } from "../+Page";
-import { UseFormHandleSubmit } from "react-hook-form";
+import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
+// redux
+import { useAppSelector } from "../../../../store/hooks";
+import { useLazyGetFilterResultsQuery } from "../../../../store/api/filterApi";
+// components
+import WarningMessage from "../../../../components/Warning";
+// types
+import type { UseFormHandleSubmit, FieldErrors } from "react-hook-form";
 import type { FormType } from "../../types";
 
 interface Props {
-    filterAllowed: boolean
+    errors: FieldErrors
     handleSubmit:  UseFormHandleSubmit<FormType>
+    trigger: ReturnType<typeof useLazyGetFilterResultsQuery>[0]
 }
 
-const FilterButton = ({ filterAllowed, getValues, handleSubmit }: Props & Pick<CommonProps, "getValues">) => {
-    const { urlParsed } = usePageContext()
-    const tab = useAppSelector((state) => state.filterSection.value)
-    const [warning, setWarning] = useState(false)
-
-    useEffect(() => {
-        if (filterAllowed) {
-            setWarning(false)
-        } 
-    }, [filterAllowed])
+const FilterButton = ({ handleSubmit, errors, trigger }: Props) => {
+    const tabOpen = useAppSelector((state) => state.filterSection.value)
     
-    useEffect(() => {
-        setWarning(false)
-    }, [tab])
+
 
     const handleFilter = async (data: FormType) => {
-        console.log(data)
-        // const form = getValues()
-        // const allTabs = ["Volumes", "Chapters", "Pages"]
-        // const range = allTabs.indexOf(tab)
+        if (tabOpen && data.saga === null) {
+            const url = `${data.bunkoban}`
+            window.open(url, "_blank", "noreferrer")
+        }
 
-        // const fieldsPerTab = [["bunkoban", "saga"], ["arc", "duel", "characters"], ["pageFilters"]]
+        const fields = Object.keys(data) as (keyof typeof data)[]
 
-        // const finalFields = fieldsPerTab.slice(0, range + 1)
+        let queries = ""
 
-        // let queries = ""
+        fields.map(field => {
+            queries += data[field] === null ? "" : `${field}=${data[field]}&`
+            
+        })
 
-        // finalFields.map((item) => {
-        //     item.map((field) => {
-        //         if (field == "pageFilters"){
-        //             queries = `${queries}page_filters=${form[field]}&`
-        //         } else {
-        //             queries = `${queries}${field}=${form[field]}&`
-        //         }
-        //     })
-        // })
-    
+        await trigger({
+            tab: tabOpen,
+            queryString: queries.slice(0, -1)
+        })
+       
 
-        // const url = `${urlParsed.pathnameOriginal}/${tab.toLowerCase()}?${queries.slice(0, -1)}`
-
-
-        // window.open(url, "_blank", "noreferrer")
     }
 
     return (
@@ -61,12 +49,19 @@ const FilterButton = ({ filterAllowed, getValues, handleSubmit }: Props & Pick<C
             <button
                 onClick={handleSubmit(handleFilter)}
                 className="w-full text-yami shadow-sm cursor-pointer text-lg px-5 py-3 items-center justify-center rounded-md bg-link flex">
-                Filter by {tab.toLocaleLowerCase()}
+                Filter by {tabOpen}
                 <MagnifyingGlassCircleIcon className="size-7 ml-2" />
             </button>
-            {warning &&
+            {errors &&
                 <div className="mt-1">
-                    <WarningMessage message="Choose at least one filter" />
+                    {Object.keys(errors).map((error) => {
+                        const message = errors[error]?.message
+                        return (
+                            <div key={`error-${error}`} className="mt-3">
+                                <WarningMessage message={`${error}: ${message}`} />
+                            </div>
+                        )
+                    })}
                 </div>
             }
         </div>

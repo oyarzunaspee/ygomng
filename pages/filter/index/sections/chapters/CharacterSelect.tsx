@@ -3,23 +3,23 @@ import { useState } from "react";
 import { ArrowTurnDownRightIcon } from "@heroicons/react/24/solid";
 import { useWatch } from "react-hook-form";
 // types
-import type { 
+import type {
     GroupType,
     CharacterType,
-} from "../../types";
-import { CommonProps } from "../+Page";
+} from "../../../types";
 
-const CharacterSelect = ({ groups, control, setValue, register }: {groups: GroupType[]} & Omit<CommonProps, "getValues">) => {
+import { CommonProps } from "../../+Page";
+
+const CharacterSelect = ({ groups, control, setValue, register }: { groups: GroupType[] } & Omit<CommonProps, "getValues">) => {
     const [engNames, setEngNames] = useState(false)
 
     const selectedChars = useWatch({
         control,
-        name: "characters",
-        defaultValue: []
+        name: "characters"
     });
 
-    const selectCharacter = (character: CharacterType | undefined, mainChoice: boolean ) => {
-        if (character === undefined) return;
+    const handleSelectCharacter = (character: CharacterType | null, mainChoice: boolean) => {
+        if (character === null) return;
 
         const current = selectedChars || []
 
@@ -32,7 +32,7 @@ const CharacterSelect = ({ groups, control, setValue, register }: {groups: Group
             if (mainChoice && character.alt && current.includes(character.alt)) {
                 updated = current.filter(char => char !== character.alt)
             }
-        // select if not in array
+            // select if not in array
         } else {
             updated = [...current, character.short]
             // also select if not nested
@@ -50,7 +50,7 @@ const CharacterSelect = ({ groups, control, setValue, register }: {groups: Group
 
     // get object of alt character
     const getAltCharacter = (alt: string) => {
-        return groups.flatMap(g => g.characters).find(c => c.short == alt)
+        return groups.flatMap(g => g.characters).find(c => c.short === alt)
     }
 
     return (
@@ -77,6 +77,7 @@ const CharacterSelect = ({ groups, control, setValue, register }: {groups: Group
                         </span>
                         <ul className="pl-5 mt-2">
                             {group.characters.map((char) => {
+                                const altCharacter = char.alt !== null ? getAltCharacter(char.alt) : null
                                 return (
 
                                     <li
@@ -89,26 +90,26 @@ const CharacterSelect = ({ groups, control, setValue, register }: {groups: Group
                                             <input
                                                 {...register("characters")}
                                                 checked={selectedChars?.includes(char.short)}
-                                                onChange={() => selectCharacter(char, true)}
+                                                onChange={() => handleSelectCharacter(char, true)}
                                                 value={char.short}
                                                 type="checkbox" className="checkbox checkbox-md border-link" />
 
                                         </div>
                                         {/* nested */}
-                                        {selectedChars?.includes(char.short) && char.alt != null &&
+                                        {selectedChars?.includes(char.short) && char.alt !== null &&
                                             <div className="flex justify-between mt-3 mb-1">
                                                 <span className="flex text-sm">
                                                     <ArrowTurnDownRightIcon className="size-5" />
                                                     {engNames ?
-                                                        (getAltCharacter(char.alt)?.eng || getAltCharacter(char.alt)?.name)
+                                                        (altCharacter?.eng || altCharacter?.name)
                                                         :
-                                                        getAltCharacter(char.alt)?.name
+                                                        altCharacter?.name
                                                     }
 
                                                 </span>
                                                 <input
                                                     checked={selectedChars.includes(char.alt)}
-                                                    onChange={() => selectCharacter(getAltCharacter(char.name), false)}
+                                                    onChange={() => handleSelectCharacter(altCharacter ?? null, false)}
                                                     type="checkbox" className="checkbox checkbox-sm border-link" />
                                             </div>
                                         }

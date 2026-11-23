@@ -1,33 +1,31 @@
 // external libraries
 import { useData } from "vike-react/useData";
-import { useState, useEffect } from "react";
+import { usePageContext } from "vike-react/usePageContext";
+import { useEffect } from "react";
+import { useForm, Control } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePageContext } from "vike-react/usePageContext";
-import {
-    useForm,
-    SubmitHandler,
-    Control,
-    useWatch
-} from "react-hook-form";
 // redux
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { swapFilterSection } from "../../../store/slices/filterSection";
+import { useLazyGetFilterResultsQuery } from "../../../store/api/filterApi";
 // components
-import EditionSelect from "./sections/EditionSelect";
-import SagaSelect from "./sections/SagaSelect";
-import ArcSelect from "./sections/ArcSelect";
-import DuelSelect from "./sections/DuelSelect";
-import CharacterSelect from "./sections/CharacterSelect";
-import PageSelect from "./sections/PageSelect";
+import EditionSelect from "./sections/volumes/EditionSelect";
+import SagaSelect from "./sections/volumes/SagaSelect";
+import ArcSelect from "./sections/chapters/ArcSelect";
+import DuelSelect from "./sections/chapters/DuelSelect";
+import CharacterSelect from "./sections/chapters/CharacterSelect";
+import PageSelect from "./sections/pages/PageSelect";
 import FilterButton from "./sections/FilterButton";
 import FilterWrapper from "./sections/FilterWrapper";
+import QueryResult from "./sections/results/QueryResult";
 
 // types
 import type { FormType } from "../types";
 import type { Data } from "./+data";
+import type { UseFormSetValue, UseFormRegister, UseFormGetValues } from "react-hook-form";
 
-import { UseFormSetValue, UseFormRegister, UseFormGetValues } from "react-hook-form";
+
 
 export interface CommonProps {
     control: Control<FormType>
@@ -38,51 +36,106 @@ export interface CommonProps {
 
 
 
+
 export default function Page() {
-    const { urlParsed } = usePageContext()
 
     const dispatch = useAppDispatch()
     const tabOpen = useAppSelector((state) => state.filterSection.value)
-    const [filterAllowed, setFilterAllowed] = useState(true)
+    const [triggerFilterResults, { isError, isLoading, isSuccess, data, originalArgs }] = useLazyGetFilterResultsQuery()
 
     const { filterData } = useData<Data>()
 
-    let schema = yup.object({
-        bunkoban: yup.string().oneOf(["bunkoban", "original"]).default("original").required(),
-        saga: yup.string().oneOf(filterData.saga).nullable().defined().default(null)
-            .when([], {
-                is: () => tabOpen == "volumes",
-                then: schema => schema.required(),
-                otherwise: schema => schema.notRequired(),
-            }),
+    const shcema = yup.object({
+        bunkoban: yup.boolean().default(false).required(),
+        saga: yup.string().nullable().defined().default(null).test(
+            "mismatch",
+            "Saga not available for Bunkoban edition",
+            (value, context) => {
+                return value === null ? !context.parent.bunkoban : true
+            }
+        ),
         arc: yup.array().of(yup.number().max(filterData.arc.length).defined()).nullable().defined().default(null),
         duel: yup.array().of(yup.string().oneOf(filterData.duel).defined()).nullable().defined().default(null),
         characters: yup.array().of(yup.string().oneOf(filterData.characterList).defined()).nullable().defined().default(null),
-        page_filter: yup.string().oneOf(filterData.pageFilterList.flatMap(item => item["query"])).nullable().defined().default(null)
-            .when([], {
-                is: () => tabOpen == "pages",
-                then: val => val.required(),
-                otherwise: val => val.notRequired(),
-            })
+        page_filter: yup.string().oneOf(filterData.pageFilterList.flatMap(item => item["query"])).nullable().defined().default(null).test(
+            "required",
+            "Page filter required",
+            (value, context) => {
+                return (tabOpen === "pages" && context.parent.page_filter === null) ? false : true
+            }
+        )
     }).test(
-        "at-least-one",
-        "At least one chapter field is required",
-        value => (tabOpen == "chapters" && !!(value?.arc || value?.duel || value?.characters))
+        (values, schema) => {
+            if (tabOpen === "chapters" && (values.arc === null && values.duel === null && values.characters === null)) {
+                return schema.createError({
+                    path: "chapter",
+                    type: "required",
+                    message: "At least one chapter filter required"
+                });
+            } else {
+                return true
+            }
+        }
     )
+
+
+
+
+    // let schema = yup.object({
+    //     bunkoban: yup.string().oneOf(["bunkoban", "original"]).default("original").required(),
+    //     saga: yup.string().oneOf(filterData.saga).nullable().defined().default(null)
+    //         .when([], {
+    //             is: () => tabOpen == "volumes",
+    //             then: schema => schema.required(),
+    //             otherwise: schema => schema.notRequired(),
+    //         }),
+    //     arc: yup.array().of(yup.number().max(filterData.arc.length).defined()).nullable().defined().default(null),
+    //     duel: yup.array().of(yup.string().oneOf(filterData.duel).defined()).nullable().defined().default(null),
+    //     characters: yup.array().of(yup.string().oneOf(filterData.characterList).defined()).nullable().defined().default(null),
+    //     page_filter: yup.string().oneOf(filterData.pageFilterList.flatMap(item => item["query"])).nullable().defined().default(null)
+    //         .when([], {
+    //             is: () => tabOpen == "pages",
+    //             then: val => val.required(),
+    //             otherwise: val => val.notRequired(),
+    //         })
+    // })
+
+    
+
 
     const {
         register,
         watch,
         control,
         setValue,
+        setValues,
         getValues,
-        handleSubmit
+        handleSubmit,
+        formState: { errors }
     } = useForm<FormType>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(shcema),
         defaultValues: {
-            bunkoban: "original"
+            bunkoban: false,
+            saga: null,
+            arc: null,
+            duel: null,
+            characters: null,
+            page_filter: null
         }
     })
+
+    useEffect(() => {
+        switch (tabOpen) {
+            case "volumes":
+                setValues({ arc: null, duel: null, characters: null, page_filter: null })
+                break
+            case "chapters":
+                setValues({ page_filter: null })
+                break
+        }
+    }, [tabOpen])
+
+
 
     const swapFilterNav = (tab: string) => {
         dispatch(swapFilterSection(tab))
@@ -110,23 +163,23 @@ export default function Page() {
                         })}
                         <div
                             className="border-x border-b w-full rounded-b-md border-dotted border-link">
-                            <FilterButton filterAllowed getValues={getValues} handleSubmit={handleSubmit} />
+                            <FilterButton handleSubmit={handleSubmit} errors={errors} trigger={triggerFilterResults} />
+
 
                             <div className={`${tabOpen === "pages" ? "max-h-1000" : "max-h-0"} overflow-hidden`}>
                                 <FilterWrapper name="Page type">
-                                    <PageSelect 
+                                    <PageSelect
                                         options={filterData.pageFilterList}
                                         control={control}
                                         excludedOptions={filterData.editionExcludedPageFilters}
-                                        setValue={setValue} 
-                                        bunkoban={watch("bunkoban") == "bunkoban"} 
-                                        register={register} 
+                                        setValue={setValue}
+                                        register={register}
                                     />
                                 </FilterWrapper>
                             </div>
 
                             <FilterWrapper name="Edition">
-                                <EditionSelect register={register} />
+                                <EditionSelect setValue={setValue} control={control} />
                             </FilterWrapper>
 
                             <FilterWrapper last={tabOpen === "volumes"} name="Saga">
@@ -148,6 +201,7 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
+                    <QueryResult isError isLoading isSuccess data={data} originalArgs={originalArgs}  />
                 </div>
             </div>
         </>

@@ -1,7 +1,10 @@
+// external libraries
 import { useEffect } from "react";
-import WarningMessage from "../../../../components/Warning";
 import { useWatch } from "react-hook-form";
-import { CommonProps } from "../+Page";
+// components
+import WarningMessage from "../../../../../components/Warning";
+// types
+import type { CommonProps } from "../../+Page";
 
 const SagaSelect = ({ register, setValue, sagas, control }: {sagas: string[]} & Omit<CommonProps, "getValues">) => {
 
@@ -13,7 +16,7 @@ const SagaSelect = ({ register, setValue, sagas, control }: {sagas: string[]} & 
 
     // sagas are only available in original edition
     useEffect(() => {
-        if (bunkoban === "bunkoban") {
+        if (bunkoban) {
             setValue(
                 "saga", "",
                 {
@@ -27,15 +30,14 @@ const SagaSelect = ({ register, setValue, sagas, control }: {sagas: string[]} & 
 
     return (
         <>
-            {bunkoban == "bunkoban" &&
+            {bunkoban &&
                 <div className={`mb-1 ${bunkoban ? "opacity-50" : ""}`}>
                     <WarningMessage message="Only available for original edition" />
                 </div>
             }
             <select
                 {...register("saga")}
-                disabled={bunkoban == "bunkoban"}
-                defaultValue=""
+                disabled={bunkoban}
                 className="w-full border border-dotted border-link rounded-md select bg-transparent">
                 <option value="">
                     No saga selected

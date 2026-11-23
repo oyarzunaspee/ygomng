@@ -1,3 +1,5 @@
+import type { VolumeData, ChapterData, PageData } from "../@edition/types";
+
 export type Arc = {
   name: string;
   number: number;
@@ -34,10 +36,19 @@ export type FilterResponse = {
 }
 
 export type FormType = {
-  bunkoban: "bunkoban" | "original";
+  bunkoban: boolean;
   saga: string | null;
   arc: number[] | null;
   duel: string[] | null;
   characters: string[] | null;
   page_filter: string | null;
+}
+
+export type FilterParams = {
+    tab: string,
+    queryString: string
+}
+
+export type ResultType = {
+  result: Partial<VolumeData>[] | Partial<ChapterData>[] | Partial<PageData>[]
 }

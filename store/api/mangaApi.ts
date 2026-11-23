@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { ComparisonResponse } from "../types";
 import type { VolumeResponse } from "../../pages/@edition/types";
+import type { ComparisonResponse } from "../../pages/@edition/chapter/@chapter/types";
 
 
 type VolumeParams = {
@@ -16,7 +16,7 @@ const URL = import.meta.env.PUBLIC_ENV__BACKEND_URL
 export const mangaApi = createApi({
     reducerPath: "mangaApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: `${URL}/v1/manga`,
+        baseUrl: `api/v1/manga`,
         credentials: "include",
     }),
     endpoints: (builder) => ({

@@ -1,6 +1,5 @@
-import type { Arc } from "../../types";
-import { useState, useEffect } from "react";
-import { CommonProps } from "../+Page";
+import type { Arc } from "../../../types";
+import { CommonProps } from "../../+Page";
 
 const ArcSelect = ({ arcs, register }: { arcs: Arc[]} & Pick<CommonProps, "register">) => {
 

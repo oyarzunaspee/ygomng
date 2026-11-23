@@ -3,9 +3,7 @@ import { useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useWatch } from "react-hook-form";
 // types
-import type { FormType } from "../../types";
-import type { UseFormSetValue, Control } from "react-hook-form";
-import { CommonProps } from "../+Page";
+import { CommonProps } from "../../+Page";
 
 const SelectedDuelsList = ({ duels, setValue }: {duels: string[] | null} & Pick<CommonProps, "setValue">) => {
 
@@ -39,13 +37,7 @@ const SelectedDuelsList = ({ duels, setValue }: {duels: string[] | null} & Pick<
     )
 };
 
-interface DuelProps {
-    duels: string[]
-    control: Control<FormType>
-    setValue: UseFormSetValue<FormType>
-}
-
-const DuelSelect = ({ duels, control, setValue }: DuelProps) => {
+const DuelSelect = ({ duels, control, setValue }: {duels: string[]} & Pick<CommonProps, "control" | "setValue">) => {
     const [autocompleteInput, setAutocompleteInput] = useState("")
 
     const selectedDuelsList = useWatch({

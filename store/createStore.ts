@@ -11,10 +11,12 @@ import screenAdjustPageSlice from "./slices/screenAdjustPage";
 
 import { authApi } from "./api/authApi";
 import { mangaApi } from "./api/mangaApi";
+import { filterApi } from "./api/filterApi";
 
 const reducer = combineReducers({
     [mangaApi.reducerPath]: mangaApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
+    [filterApi.reducerPath]: filterApi.reducer,
     pageMenu: pageMenuSlice,
     jumpToChapter: jumpToChapterSlice,
     maxNextChapter: maxNextChapterSlice,
@@ -34,6 +36,6 @@ const createStore = (pageContext: PageContext) => {
         thunk: {
           extraArgument: { pageContext }
         },
-      }).concat(authApi.middleware, mangaApi.middleware),
+      }).concat(authApi.middleware, mangaApi.middleware, filterApi.middleware),
   })
 }

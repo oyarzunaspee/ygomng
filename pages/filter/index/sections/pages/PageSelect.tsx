@@ -1,21 +1,25 @@
 import { useState, useEffect } from "react";
-import type { PageFilters } from "../../types";
-import WarningMessage from "../../../../components/Warning";
+import type { PageFilters } from "../../../types";
+import WarningMessage from "../../../../../components/Warning";
 import { useWatch } from "react-hook-form";
-import { CommonProps } from "../+Page";
+import { CommonProps } from "../../+Page";
 
 interface Props {
     options: PageFilters[]
     excludedOptions: { bunkoban: string[], original: string[] }
-    bunkoban: boolean
 }
 
-const PageSelect = ({ options, excludedOptions, setValue, bunkoban, register, control }: Props & Omit<CommonProps, "getValues">) => {
+const PageSelect = ({ options, excludedOptions, setValue, register, control }: Props & Omit<CommonProps, "getValues">) => {
 
     const selectedPageFilter = useWatch({
         control,
         name: "page_filter",
         defaultValue: null
+    });
+    
+    const bunkoban = useWatch({
+        control,
+        name: "bunkoban"
     });
 
 
@@ -75,7 +79,7 @@ const PageSelect = ({ options, excludedOptions, setValue, bunkoban, register, co
                                 {...register("page_filter")}
                                 value={option.query}
                                 disabled={isFilterAvailable}
-                                type="radio" className="radio text-link"
+                                type="radio" className="radio"
                             />
                         </div>
                     </div>
