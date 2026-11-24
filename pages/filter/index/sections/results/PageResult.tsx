@@ -1,5 +1,5 @@
 import type { ResultPageType } from "../../../types"
-import type { ResultCommonProps } from "./QueryResult"
+import type { ResultCommonProps } from "../QueryResult"
 
 
 const PageResult = ({ isError, isLoading, isSuccess, data}: {data: ResultPageType} & ResultCommonProps) => {

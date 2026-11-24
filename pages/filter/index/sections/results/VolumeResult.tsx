@@ -1,13 +1,25 @@
-import type { ResultVolumeType } from "../../../types"
-import type { ResultCommonProps } from "./QueryResult"
+import type { VolumeData } from "../../../../@edition/types";
+import type { ResultType } from "../../../types";
 
 
-const VolumeResult = ({ isError, isLoading, isSuccess, data}: {data: ResultVolumeType} & ResultCommonProps) => {
-    return (
-        <>
-        aa
-        </>
-    )
+const VolumeResult = ({ data }: { data: Partial<VolumeData>[]}) => {
+    console.log(data)
+   
+        return (
+            <>
+            {data.map(vol => {
+                return (
+                    <ul className="" key={`volume-result-list-${vol.counter}`}>
+                        <li className="">
+                            {vol.title}
+                        </li>
+                    </ul>
+                )
+            })}
+            </>
+        )
+
+
 }
 
 export default VolumeResult;

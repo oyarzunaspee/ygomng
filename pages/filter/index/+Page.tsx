@@ -18,7 +18,7 @@ import CharacterSelect from "./sections/chapters/CharacterSelect";
 import PageSelect from "./sections/pages/PageSelect";
 import FilterButton from "./sections/FilterButton";
 import FilterWrapper from "./sections/FilterWrapper";
-import QueryResult from "./sections/results/QueryResult";
+import QueryResult from "./sections/QueryResult";
 
 // types
 import type { FormType } from "../types";
@@ -33,8 +33,6 @@ export interface CommonProps {
     register: UseFormRegister<FormType>
     getValues: UseFormGetValues<FormType>
 }
-
-
 
 
 export default function Page() {
@@ -77,31 +75,6 @@ export default function Page() {
             }
         }
     )
-
-
-
-
-    // let schema = yup.object({
-    //     bunkoban: yup.string().oneOf(["bunkoban", "original"]).default("original").required(),
-    //     saga: yup.string().oneOf(filterData.saga).nullable().defined().default(null)
-    //         .when([], {
-    //             is: () => tabOpen == "volumes",
-    //             then: schema => schema.required(),
-    //             otherwise: schema => schema.notRequired(),
-    //         }),
-    //     arc: yup.array().of(yup.number().max(filterData.arc.length).defined()).nullable().defined().default(null),
-    //     duel: yup.array().of(yup.string().oneOf(filterData.duel).defined()).nullable().defined().default(null),
-    //     characters: yup.array().of(yup.string().oneOf(filterData.characterList).defined()).nullable().defined().default(null),
-    //     page_filter: yup.string().oneOf(filterData.pageFilterList.flatMap(item => item["query"])).nullable().defined().default(null)
-    //         .when([], {
-    //             is: () => tabOpen == "pages",
-    //             then: val => val.required(),
-    //             otherwise: val => val.notRequired(),
-    //         })
-    // })
-
-    
-
 
     const {
         register,
@@ -201,7 +174,7 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-                    <QueryResult isError isLoading isSuccess data={data} originalArgs={originalArgs}  />
+                    <QueryResult isError={isError} isLoading={isLoading} isSuccess={isSuccess} data={data ?? null} originalArgs={originalArgs}  />
                 </div>
             </div>
         </>

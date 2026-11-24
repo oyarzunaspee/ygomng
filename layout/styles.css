@@ -58,3 +58,7 @@
 .radio {
   @apply text-link;
 }
+
+.loading {
+  @apply text-link;
+}

@@ -22,6 +22,8 @@ export type GroupType = {
   characters: CharacterType[];
 }
 
+export type TabType = "volumes" | "chapters" | "pages"
+
 export type FilterType = {
   saga: string[];
   arc: Arc[];
@@ -45,10 +47,22 @@ export type FormType = {
 }
 
 export type FilterParams = {
-    tab: string,
-    queryString: string
+  tab: string,
+  queryString: string
 }
 
-export type ResultType = {
-  result: Partial<VolumeData>[] | Partial<ChapterData>[] | Partial<PageData>[]
-}
+export type ResultType = | { results: Partial<VolumeData>[] } | { results: Partial<ChapterData>[] } | { results: Partial<PageData>[] }
+
+// export type ResultType = 
+//   | {
+//     tab: "volumes";
+//     results: Partial<VolumeData>[];
+//   }
+//   | {
+//     tab: "chapters";
+//     results: Partial<ChapterData>[];
+//   }
+//   | {
+//     tab: "pages";
+//     results: Partial<PageData>[];
+//   };

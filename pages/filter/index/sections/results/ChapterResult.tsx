@@ -1,5 +1,5 @@
 import type { ResultChapterType } from "../../../types"
-import { ResultCommonProps } from "./QueryResult";
+import { ResultCommonProps } from "../QueryResult";
 
 const ChapterResult = ({ isError, isLoading, isSuccess, data}: {data: ResultChapterType} & ResultCommonProps) => {
     return (
